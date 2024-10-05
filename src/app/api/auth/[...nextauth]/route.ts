@@ -28,9 +28,8 @@
  *         description: Successfully authenticated
  */
 import authOptions from "@/lib/auth";
-import { NextApiHandler } from "next";
 import NextAuth from "next-auth/next";
 
-const handler: NextApiHandler = (req, res) => NextAuth(req, res, authOptions);
+const handler = NextAuth(authOptions);
 
 export { handler as GET, handler as POST };
