@@ -18,11 +18,15 @@ import UserModel, { IUser } from "@/models/user.model";
  *     description: Get all users
  *     responses:
  *       200:
- *         description: Success
+ *         description: Request Success
  */
 export async function GET() {
   await connectToDatabase();
-  const users: IUser[] = await UserModel.find({});
+
+  const users: IUser[] = await UserModel.find({}).select(
+    "-password -deletedAt -createdAt -updatedAt -status"
+  );
+
   return jsonResponse(
     users,
     responseMessageUtilities.message,

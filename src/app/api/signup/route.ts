@@ -8,12 +8,11 @@ import bcrypt from "bcryptjs";
  * @swagger
  * tags:
  *   name: Auth
- *   description: Auth related operations
  */
 
 /**
  * @swagger
- * /api/auth:
+ * /api/signup:
  *   post:
  *     tags: [Auth]
  *     description: Create a new user
@@ -38,10 +37,7 @@ export async function POST(req: Request) {
 
   const payload: IUser = await req.json();
 
-  const hashedPassword = await bcrypt.hash(
-    payload.password,
-     10
-  );
+  const hashedPassword = await bcrypt.hash(payload.password, 10);
   const newUser: IUser = new UserModel({
     ...payload,
     password: hashedPassword,
