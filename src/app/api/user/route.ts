@@ -29,37 +29,3 @@ export async function GET() {
     responseMessageUtilities.success
   );
 }
-
-/**
- * @swagger
- * /api/user:
- *   post:
- *     tags: [User]
- *     description: Create a new user
- *     requestBody:
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               name:
- *                 type: string
- *               email:
- *                 type: string
- *               password:
- *                 type: string
- *     responses:
- *       201:
- *         description: User created successfully
- */
-export async function POST(req: Request) {
-  await connectToDatabase();
-  const payload: IUser = await req.json();
-  const newUser: IUser = new UserModel({ ...payload });
-  await newUser.save();
-  return jsonResponse(
-    newUser,
-    responseMessageUtilities.message,
-    responseMessageUtilities.create
-  );
-}

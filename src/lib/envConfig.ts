@@ -6,4 +6,5 @@ export const envConfig = {
       : ("http://localhost:3000" as string),
 
   mongodbUri: process.env.MONGODB_URI as string,
+  saltRounds: process.env.SALT_ROUNDS as unknown as number,
 };
