@@ -1,12 +1,9 @@
 import { NextResponse } from "next/server";
-import RoleModel from "@/models/role.model";
+import RoleModel, { AdminEnum } from "@/models/role.model";
 import { connectToDatabase } from "@/lib/connectToDb";
 import { jsonResponse } from "@/lib/response.utils";
 import { responseMessageUtilities } from "@/lib/response.message.utility";
 
-export enum AdminEnum {
-  SUPER_ADMIN = "Super Admin",
-}
 
 /**
  * @swagger

@@ -1,5 +1,9 @@
 import mongoose, { Document, Model, Schema } from "mongoose";
 
+export enum AdminEnum {
+    SUPER_ADMIN = "Super Admin",
+  }
+
 export interface IRole extends Document {
   rolename: string;
   description: string;
