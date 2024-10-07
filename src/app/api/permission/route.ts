@@ -1,6 +1,8 @@
 import PermissionModel, { IPermission } from "@/models/permission.model";
 import { connectToDatabase } from "@/lib/connectToDb";
 import { NextResponse } from "next/server";
+import { jsonResponse } from "@/lib/response.utils";
+import { responseMessageUtilities } from "@/lib/response.message.utility";
 
 /**
  * @swagger
@@ -37,7 +39,12 @@ export const POST = async (req: Request, res: Response) => {
   const permissionData: Partial<IPermission> = await req.json();
   const permission = new PermissionModel(permissionData);
   await permission.save();
-  return NextResponse.json(permission, { status: 201 });
+
+  return jsonResponse(
+    permission,
+    responseMessageUtilities.message,
+    responseMessageUtilities.create
+  );
 };
 
 /**
@@ -53,5 +60,10 @@ export const POST = async (req: Request, res: Response) => {
 export const GET = async (req: Request, res: Response) => {
   await connectToDatabase();
   const permissions = await PermissionModel.find();
-  return NextResponse.json(permissions, { status: 200 });
+
+  return jsonResponse(
+    permissions,
+    responseMessageUtilities.message,
+    responseMessageUtilities.success
+  );
 };
