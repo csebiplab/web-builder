@@ -12,7 +12,7 @@ import { responseMessageUtilities } from "@/lib/response.message.utility";
 
 /**
  * @swagger
- * /api/userrole:
+ * /api/user-role:
  *   get:
  *     tags: [Auth]
  *     description: Fetch all user-role mappings.
