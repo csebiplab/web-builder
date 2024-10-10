@@ -156,7 +156,7 @@ export async function GET() {
  *         description: Server error.
  */
 
-export async function PATCH(request: NextRequest) {
+export async function DELETE(request: NextRequest) {
   try {
     const id = request.nextUrl.searchParams.get("id");
 
