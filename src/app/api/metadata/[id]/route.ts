@@ -6,11 +6,6 @@ import { responseMessageUtilities } from "@/lib/response.message.utility";
 import { connectToDatabase } from "@/lib/connectToDb";
 import MetaDataModel, { IMetaData } from "@/models/metadata.model";
 
-/**
- * @swagger
- * tags:
- *   name: MetaData
- */
 
 /**
  * @swagger
