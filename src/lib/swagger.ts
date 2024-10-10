@@ -8,8 +8,7 @@ const swaggerDefinition: OpenAPIV3.Document = {
   info: {
     title: "WEB BUILDER",
     version: "1.0.0",
-    description:
-      "API documentation for Next.js App Router with MongoDB and Mongoose",
+    description: "API documentation for web-builder website",
   },
   servers: [
     {
