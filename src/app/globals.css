@@ -3,11 +3,11 @@
 @tailwind utilities;
 
 * {
-  @apply text-white;
+  @apply text-dark;
 }
 
 body {
-  background-color: #090901;
+  background-color: #f5f8fa;
   overflow-x: hidden !important;
 }
 

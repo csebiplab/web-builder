@@ -21,7 +21,7 @@ export default function () {
 
     try {
       setIsLoading(true);
-      const res = await signIn(providers.CREDENTIALS, {
+      const res = await signIn(providers?.CREDENTIALS, {
         username,
         password,
         redirect: false,
@@ -39,7 +39,8 @@ export default function () {
       }
 
       if (res.ok && res?.error == null) {
-        router.push("/dashboard/admin/profile");
+        return router.push("/dashboard");
+        // router.push("/dashboard/admin/profile");
       }
     } catch (error) {
       console.log(error);

@@ -39,8 +39,10 @@ const authOptions: NextAuthOptions = {
 
         return {
           id: (user._id as mongoose.Types.ObjectId).toString(),
-          name: user.username,
+          name: user.name,
+          username: user.username,
           email: user?.email,
+          role: "Super Admin"
         } as User;
       },
     }),
@@ -53,6 +55,9 @@ const authOptions: NextAuthOptions = {
       if (user) {
         token.id = user.id;
         token.name = user.name;
+        token.username = user.username;
+        token.email = user.email;
+        token.role = user.role;
       }
       return token;
     },
@@ -60,6 +65,9 @@ const authOptions: NextAuthOptions = {
       if (token) {
         session.user.id = token.id;
         session.user.name = token.name;
+        session.user.username = token.username;
+        session.user.email = token.email;
+        session.user.role = token.role;
       }
       return session;
     },
