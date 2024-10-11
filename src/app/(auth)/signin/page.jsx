@@ -39,8 +39,8 @@ export default function () {
       }
 
       if (res.ok && res?.error == null) {
-        return router.push("/dashboard");
-        // router.push("/dashboard/admin/profile");
+        // return router.push("/dashboard");
+        router.push("/dashboard/admin/profile");
       }
     } catch (error) {
       console.log(error);
