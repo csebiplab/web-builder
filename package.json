@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@material-tailwind/react": "^2.1.10",
     "bcryptjs": "^2.4.3",
     "mongodb": "^6.9.0",
     "mongoose": "^8.7.0",
@@ -16,6 +17,8 @@
     "next-auth": "^4.24.8",
     "react": "^18",
     "react-dom": "^18",
+    "react-hook-form": "^7.53.0",
+    "react-toastify": "^10.0.5",
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^5.0.1",
     "swagger-ui-react": "^5.17.14"
