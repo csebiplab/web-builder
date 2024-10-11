@@ -1,30 +1,15 @@
 "use client";
+
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Icon } from "@iconify/react";
-import { dashboardConfig } from "@/constants/dashboard/dashboard.constants";
 import { useState } from "react";
-import { Icons } from "./__dashboard_ui/icons";
+import { Icons } from "../__dashboard_ui/icons";
 import { cn } from "@/lib/utils";
 
-export default function DashboardNav() {
-  return (
-    <div className="flex flex-col gap-5 h-full">
-      <h1 className="font-medium text-lg">Admin Dashboard</h1>
-      <nav className="flex flex-col flex-1 gap-2">
-        {dashboardConfig.sidebarNav.map((item, i = 1) => {
-          return (
-            <div key={i + 1}>
-              <MenuItem item={item} />
-            </div>
-          );
-        })}
-      </nav>
-    </div>
-  );
-}
 
-const MenuItem = ({ item }) => {
+
+export const DashboardSidebarMenuItem = ({ item }) => {
   const pathname = usePathname();
   const [subMenuOpen, setSubMenuOpen] = useState(false);
   const toggleSubMenu = () => {

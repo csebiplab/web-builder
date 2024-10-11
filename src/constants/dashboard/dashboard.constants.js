@@ -4,12 +4,14 @@ export const dashboardConfig = {
             title: "My Profile",
             href: "/dashboard/admin/profile",
             icon: "home",
+            permissionName: "My Profile"
         },
         {
             title: "Users",
             href: "/dashboard/user-management",
             icon: "users",
             submenu: true,
+            permissionName: "Users",
             submenus: [
                 {
                     title: "Show Users",
@@ -44,10 +46,17 @@ export const dashboardConfig = {
             ],
         },
         {
+            title: "Projects",
+            href: "/dashboard/create-project",
+            icon: "boxes",
+            permissionName: "Projects"
+        },
+        {
             title: "Pages",
             href: "/dashboard/allpages/home",
             icon: "boxes",
             submenu: true,
+            permissionName: "Pages",
             submenus: [
                 {
                     title: "Create Metadata",
@@ -67,6 +76,7 @@ export const dashboardConfig = {
             href: "/dashboard/siteVerification",
             icon: "boxes",
             submenu: true,
+            permissionName: "SEO",
             submenus: [
                 {
                     title: "Site Verification",
@@ -90,6 +100,7 @@ export const dashboardConfig = {
             href: "/dashboard/blogs",
             icon: "boxes",
             submenu: true,
+            permissionName: "Blogs",
             submenus: [
                 {
                     title: "All Blog",

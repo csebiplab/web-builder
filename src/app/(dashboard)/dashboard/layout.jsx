@@ -1,12 +1,12 @@
-import DashboardNav from "@/components/__dashboard/DashboardNav";
-import "../../globals.css";
-import { ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import DashboardShell from "@/components/__dashboard/DashboardShell";
 import DashboardHeader from "@/components/__dashboard/DashboardHeader";
+import { DashboardSidebar } from "@/components/__dashboard/DashboardSidebar/DashboardSidebar";
+
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import "../../globals.css";
 
 export default async function DashboardLayout({ children }) {
-
   return (
     <html>
       <body>
@@ -15,7 +15,7 @@ export default async function DashboardLayout({ children }) {
             className="max-h-screen w-60 p-5 bg-gray-3 border border-gray-2
       rounded-lg sticky top-0 max-md:hidden overflow-scroll"
           >
-            <DashboardNav />
+            <DashboardSidebar />
           </aside>
           <main className="flex-1 bg-gray-3 border border-gray-2  rounded-lg  max-h-screen overflow-auto pb-5 ">
             <DashboardShell>
