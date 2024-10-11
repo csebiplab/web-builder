@@ -2,26 +2,45 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+* {
+  @apply text-white;
 }
 
 body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: #090901;
+  overflow-x: hidden !important;
 }
 
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
-  }
+footer * {
+  @apply text-white;
+}
+
+.container {
+  @apply max-w-screen-5xl px-3 md:px-5 lg:px-10 xl:px-20 2xl:px-28 3xl:px-40 4xl:px-52 5xl:px-[285px] mx-auto;
+}
+
+a {
+  @apply text-primary-600 underline-offset-2 hover:underline decoration-primary-700;
+}
+
+.btn {
+  @apply tracking-wider py-3 px-6 text-white font-medium text-lg bg-primary-700  hover:bg-primary-600 active:bg-primary-700 duration-150;
+}
+
+::-webkit-scrollbar {
+  width: 5px;
+}
+
+::-webkit-scrollbar-track {
+  padding: 0 2px;
+  background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+  border-radius: 100px;
+  @apply bg-secondary-700;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-primary;
 }
