@@ -37,12 +37,29 @@ const authOptions: NextAuthOptions = {
           throw new Error("Invalid password");
         }
 
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL}/api/user/whoami?id=${user?._id}`,
+          { cache: "no-store" }
+        );
+        const data = await res.json();
+        const userWithPermissionAndRole = data?.data?.[0];
+        if (
+          !userWithPermissionAndRole?.role ||
+          userWithPermissionAndRole?.permissions?.length < 1
+        )
+          if (!user) {
+            throw new Error("User has no role or permissions");
+          }
+
         return {
-          id: (user._id as mongoose.Types.ObjectId).toString(),
-          name: user.name,
-          username: user.username,
-          email: user?.email,
-          role: "Super Admin"
+          id: (
+            userWithPermissionAndRole._id as mongoose.Types.ObjectId
+          ).toString(),
+          name: userWithPermissionAndRole?.name,
+          username: userWithPermissionAndRole?.username,
+          email: userWithPermissionAndRole?.email,
+          role: userWithPermissionAndRole?.role,
+          permissions: userWithPermissionAndRole.permissions,
         } as User;
       },
     }),
@@ -58,6 +75,7 @@ const authOptions: NextAuthOptions = {
         token.username = user.username;
         token.email = user.email;
         token.role = user.role;
+        token.permissions = user.permissions;
       }
       return token;
     },
@@ -68,6 +86,7 @@ const authOptions: NextAuthOptions = {
         session.user.username = token.username;
         session.user.email = token.email;
         session.user.role = token.role;
+        session.user.permissions = token.permissions;
       }
       return session;
     },

@@ -3,6 +3,7 @@ import getCurrentUser from "@/lib/session";
 
 const MyProfilePage = async () => {
   const user = await getCurrentUser();
+
   return (
     <div className="mt-10">
       <div className="flex justify-center">

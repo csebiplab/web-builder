@@ -5,8 +5,8 @@ import "react-toastify/dist/ReactToastify.css";
 import DashboardShell from "@/components/__dashboard/DashboardShell";
 import DashboardHeader from "@/components/__dashboard/DashboardHeader";
 
+export default async function DashboardLayout({ children }) {
 
-export default function DashboardLayout({ children }) {
   return (
     <html>
       <body>
@@ -29,5 +29,3 @@ export default function DashboardLayout({ children }) {
     </html>
   );
 }
-
-
