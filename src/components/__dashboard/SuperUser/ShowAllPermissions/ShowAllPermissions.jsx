@@ -2,16 +2,9 @@
 
 import { Card, Typography } from "@material-tailwind/react";
 
-const TABLE_HEAD = [
-  "Serial",
-  "Name",
-  "User Name",
-  "email",
-  "Access Modules",
-  "Actions",
-];
+const TABLE_HEAD = ["Serial", "Role Name", "Description", "Actions"];
 
-export function ShowAllUsers({ data }) {
+export function ShowAllPermissions({ data }) {
   return (
     <Card className="h-full w-full overflow-scroll">
       <table className="w-full min-w-max table-auto text-left">
@@ -34,7 +27,7 @@ export function ShowAllUsers({ data }) {
           </tr>
         </thead>
         <tbody>
-          {data?.map(({ _id, name, username, email }, index) => (
+          {data?.map(({ _id, permissionName, description }, index) => (
             <tr key={_id} className="even:bg-blue-gray-50/50">
               <td className="p-4">
                 <Typography
@@ -51,7 +44,7 @@ export function ShowAllUsers({ data }) {
                   color="blue-gray"
                   className="font-normal"
                 >
-                  {name}
+                  {permissionName}
                 </Typography>
               </td>
               <td className="p-4">
@@ -60,25 +53,7 @@ export function ShowAllUsers({ data }) {
                   color="blue-gray"
                   className="font-normal"
                 >
-                  {username}
-                </Typography>
-              </td>
-              <td className="p-4">
-                <Typography
-                  variant="small"
-                  color="blue-gray"
-                  className="font-normal"
-                >
-                  {email}
-                </Typography>
-              </td>
-              <td className="p-4 text-wrap">
-                <Typography
-                  variant="small"
-                  color="blue-gray"
-                  className="font-normal"
-                >
-                  Update soon
+                  {description}
                 </Typography>
               </td>
               <td className="p-4">

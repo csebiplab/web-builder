@@ -44,13 +44,13 @@ export const dashboardConfig = {
                     icon: "dessert",
                 },
                 {
-                    title: "Create A Permission",
-                    href: "/dashboard/super-user/create-permission",
+                    title: "Show Permissions",
+                    href: "/dashboard/super-user/show-permissions",
                     icon: "dessert",
                 },
                 {
-                    title: "Show Permissions",
-                    href: "/dashboard/super-user/show-permissions",
+                    title: "Create A Permission",
+                    href: "/dashboard/super-user/create-permission",
                     icon: "dessert",
                 },
             ],
