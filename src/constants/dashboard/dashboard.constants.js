@@ -7,40 +7,40 @@ export const dashboardConfig = {
             permissionName: "My Profile"
         },
         {
-            title: "Users",
-            href: "/dashboard/user-management",
+            title: "Super User",
+            href: "/dashboard/super-user",
             icon: "users",
             submenu: true,
             permissionName: "Users",
             submenus: [
                 {
                     title: "Show Users",
-                    href: "/dashboard/user-management/show-users",
+                    href: "/dashboard/super-user/show-users",
                     icon: "dessert",
                 },
                 {
                     title: "Create A User",
-                    href: "/dashboard/user-management/create-user",
+                    href: "/dashboard/super-user/create-user",
                     icon: "dessert",
                 },
                 {
                     title: "Show Roles",
-                    href: "/dashboard/user-management/show-roles",
+                    href: "/dashboard/super-user/show-roles",
                     icon: "dessert",
                 },
                 {
                     title: "Create A Role",
-                    href: "/dashboard/user-management/create-role",
+                    href: "/dashboard/super-user/create-role",
                     icon: "dessert",
                 },
                 {
                     title: "Show Permissions",
-                    href: "/dashboard/user-management/show-permissions",
+                    href: "/dashboard/super-user/show-permissions",
                     icon: "dessert",
                 },
                 {
                     title: "Create A Permission",
-                    href: "/dashboard/user-management/create-permission",
+                    href: "/dashboard/super-user/create-permission",
                     icon: "dessert",
                 },
             ],
