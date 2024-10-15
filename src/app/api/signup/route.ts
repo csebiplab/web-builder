@@ -22,6 +22,8 @@ import bcrypt from "bcryptjs";
  *           schema:
  *             type: object
  *             properties:
+ *               name:
+ *                 type: string
  *               username:
  *                 type: string
  *               email:

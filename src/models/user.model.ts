@@ -12,7 +12,7 @@ export interface IUser extends Document {
   email: string;
   password: string;
   status: UserStatus;
-  projectfor: string;
+  // projectfor?: string;
   deletedAt?: Date;
   createdAt: Date;
   updatedAt: Date;
@@ -29,7 +29,7 @@ const userSchema: Schema<IUser> = new Schema(
       enum: Object.values(UserStatus),
       default: UserStatus.NonVerified,
     },
-    projectfor: { type: String, required: true, unique: true },
+    // projectfor: { type: String, required: false, unique: true },
     deletedAt: { type: Date, default: null },
   },
   {

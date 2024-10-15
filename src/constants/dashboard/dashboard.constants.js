@@ -20,7 +20,7 @@ export const dashboardConfig = {
                 },
                 {
                     title: "Create A User",
-                    href: "/dashboard/super-user/create-user",
+                    href: "/dashboard/super-user/add-user",
                     icon: "dessert",
                 },
                 {
