@@ -14,18 +14,13 @@ export const dashboardConfig = {
             permissionName: "Users",
             submenus: [
                 {
-                    title: "Show Users",
-                    href: "/dashboard/super-user/show-users",
-                    icon: "dessert",
-                },
-                {
                     title: "Create A User",
                     href: "/dashboard/super-user/add-user",
                     icon: "dessert",
                 },
                 {
-                    title: "Show Roles",
-                    href: "/dashboard/super-user/show-roles",
+                    title: "Show Users",
+                    href: "/dashboard/super-user/show-users",
                     icon: "dessert",
                 },
                 {
@@ -34,13 +29,28 @@ export const dashboardConfig = {
                     icon: "dessert",
                 },
                 {
-                    title: "Show Permissions",
-                    href: "/dashboard/super-user/show-permissions",
+                    title: "Show Roles",
+                    href: "/dashboard/super-user/show-roles",
+                    icon: "dessert",
+                },
+                {
+                    title: "Give Permissions",
+                    href: "/dashboard/super-user/give-permissions",
+                    icon: "dessert",
+                },
+                {
+                    title: "Assign Role",
+                    href: "/dashboard/super-user/assign-role",
                     icon: "dessert",
                 },
                 {
                     title: "Create A Permission",
                     href: "/dashboard/super-user/create-permission",
+                    icon: "dessert",
+                },
+                {
+                    title: "Show Permissions",
+                    href: "/dashboard/super-user/show-permissions",
                     icon: "dessert",
                 },
             ],
