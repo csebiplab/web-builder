@@ -1,10 +1,10 @@
 import { envConfig } from "@/lib/envConfig";
-import { ShowAllUsers } from "../../../../../../components/__dashboard/SuperUser/ShowAllUsers/ShowAllUsers";
+import { ShowAllRoles } from "../../../../../../components/__dashboard/SuperUser/ShowAllRoles/ShowAllRoles";
 
 export async function getData() {
   const apiUrl = envConfig.url;
 
-  const res = await fetch(`${apiUrl}/api/user`, {
+  const res = await fetch(`${apiUrl}/api/role`, {
     cache: "no-store",
   });
   const data = await res.json();
@@ -16,8 +16,8 @@ export default async function page() {
 
   return (
     <div className="px-8">
-      <p className="text-3xl font-extrabold">All Users</p>
-      <ShowAllUsers data={data} />
+      <p className="text-3xl font-extrabold">All Roles</p>
+      <ShowAllRoles data={data} />
     </div>
   );
 }
