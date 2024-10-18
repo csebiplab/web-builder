@@ -3,20 +3,9 @@
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 
-const roles = [
-  { id: 1, name: "Admin" },
-  { id: 2, name: "Editor" },
-  { id: 3, name: "Viewer" },
-];
 
-const permissions = [
-  { id: 1, name: "Create" },
-  { id: 2, name: "Read" },
-  { id: 3, name: "Update" },
-  { id: 4, name: "Delete" },
-];
 
-const GivePermissions = () => {
+const GivePermissions = ({roles, permissions}) => {
   const { register, handleSubmit, reset } = useForm();
   const [selectedRole, setSelectedRole] = useState("");
 
@@ -50,8 +39,8 @@ const GivePermissions = () => {
       >
         <option value="">Select a role</option>
         {roles.map((role) => (
-          <option key={role.id} value={role.name}>
-            {role.name}
+          <option key={role._id} value={role.value}>
+            {role.label}
           </option>
         ))}
       </select>
@@ -63,19 +52,19 @@ const GivePermissions = () => {
           </label>
           <div className="grid grid-cols-2 gap-4 mb-4">
             {permissions.map((permission) => (
-              <div key={permission.id} className="flex items-center">
+              <div key={permission._id} className="flex items-center">
                 <input
                   type="checkbox"
-                  id={`permission-${permission.id}`}
-                  value={permission.name}
+                  id={`permission-${permission._id}`}
+                  value={permission.value}
                   className="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
                   {...register("permissions")}
                 />
                 <label
-                  htmlFor={`permission-${permission.id}`}
+                  htmlFor={`permission-${permission._id}`}
                   className="ml-2 text-sm font-medium text-gray-700"
                 >
-                  {permission.name}
+                  {permission.label}
                 </label>
               </div>
             ))}
