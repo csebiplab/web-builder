@@ -20,6 +20,8 @@ const robotSchema = new Schema<IRobotTxt>(
   },
   {
     timestamps: true,
+    toObject: { virtuals: true },
+    toJSON: { virtuals: true },
   }
 );
 
