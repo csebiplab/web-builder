@@ -16,6 +16,7 @@ import { NextResponse } from "next/server";
  * /api/projects:
  *   post:
  *     tags: [Projects]
+ *     summary: Create project
  *     description: Create a new project by providing the required details.
  *     requestBody:
  *       required: true
@@ -26,7 +27,7 @@ import { NextResponse } from "next/server";
  *             properties:
  *               projectFor:
  *                 type: string
- *                 example: Interior
+ *                 example: RhAdmin
  *               projectType:
  *                 type: string
  *                 example: Interior
