@@ -1,0 +1,81 @@
+.parent__projectDetails {
+  /* border-radius: 15px; */
+  background: #fff;
+  box-shadow: 5px 5px 50px 0px rgba(0, 0, 0, 0.15);
+}
+
+.service__info {
+  color: #000;
+  font-size: 36px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 36px; /* 100% */
+}
+
+select {
+  cursor: pointer;
+}
+
+/* select {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background: transparent;
+  background-image: url("/assets/icons/arrow.png");
+  background-repeat: no-repeat;
+  background-position: calc(100% - 10px) center;
+  border: 1px solid #dfdfdf;
+  border-radius: 2px;
+  padding: 1rem;
+  padding-right: 2rem;
+  margin-right: 2rem;
+  font-size: 1rem;
+  color: inherit;
+  cursor: pointer;
+} */
+
+select:focus,
+input:focus {
+  outline: none;
+}
+
+.input__label {
+  color: #000;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 18px; /* 112.5% */
+}
+
+.dropdown__input {
+  border-radius: 6px;
+  border: 0.25px solid #bcbcbc;
+  background: #fff;
+  font-size: 20px;
+  box-shadow: 1px 1px 2px 0px rgba(0, 0, 0, 0.25);
+}
+
+.choose__file {
+  border-radius: 2px;
+  border: 0.5px solid #a4a4a4;
+  background: #e2e2e2;
+}
+
+.plus__upload:hover .upload__img {
+  background: rgb(50, 190, 233);
+}
+
+.plus__upload:hover .upload__text {
+  color: rgb(50, 190, 233);
+}
+
+.preview__container {
+  border-radius: 6px;
+  background: #fff;
+  box-shadow: 0px 0px 6px 0px rgba(0, 0, 0, 0.25);
+}
+
+.creat__project__btn {
+  border-radius: 6px;
+  background: #000;
+}
