@@ -87,7 +87,7 @@ export async function POST(req: Request) {
 
     const role = await RolePermissionModel.findOne({ roleId: roleId });
 
-    if (role && role?.id) {
+    if (role && role?.roleId) {
       return NextResponse.json(
         { error: "You already have given permissions for this role!" },
         { status: 400 }

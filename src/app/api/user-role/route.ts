@@ -3,6 +3,7 @@ import UserRoleModel from "@/models/userRole.model";
 import { connectToDatabase } from "@/lib/connectToDb";
 import { jsonResponse } from "@/lib/response.utils";
 import { responseMessageUtilities } from "@/lib/response.message.utility";
+import * as mongoose from "mongoose";
 
 /**
  * @swagger
@@ -91,11 +92,23 @@ export async function POST(req: Request) {
       );
     }
 
-    const newUserRole = new UserRoleModel({ userId, roleId });
-    await newUserRole.save();
+    const userRole = await UserRoleModel.findOne({ userId: userId });
+
+    if (userRole && userRole?.userId) {
+      return NextResponse.json(
+        { error: "You already have given a role for this user!" },
+        { status: 400 }
+      );
+    }
+
+    const newUserRole = {
+      userId: new mongoose.Types.ObjectId(userId),
+      roleId: new mongoose.Types.ObjectId(roleId),
+    };
+    const res = await UserRoleModel.create(newUserRole);
 
     return jsonResponse(
-      newUserRole,
+      res,
       responseMessageUtilities.message,
       responseMessageUtilities.create
     );
@@ -106,3 +119,27 @@ export async function POST(req: Request) {
     );
   }
 }
+
+/*
+
+{
+  "_id": {
+    "$oid": "67041be2f5365a8f2cfbf76e"
+  },
+  "userId": {
+    "$oid": "670ea75b84cc5d50de983d00"
+  },
+  "roleId": {
+    "$oid": "67040e95607f60f5afdb1b55"
+  },
+  "deletedAt": null,
+  "createdAt": {
+    "$date": "2024-10-07T17:35:30.818Z"
+  },
+  "updatedAt": {
+    "$date": "2024-10-07T17:35:30.818Z"
+  },
+  "__v": 0
+}
+
+*/

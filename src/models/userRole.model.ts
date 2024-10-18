@@ -14,6 +14,7 @@ const userRoleSchema: Schema<IUserRole> = new Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
       required: true,
+      unique: true,
     },
     roleId: {
       type: mongoose.Schema.Types.ObjectId,
