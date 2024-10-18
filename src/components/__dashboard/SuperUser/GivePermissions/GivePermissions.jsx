@@ -2,21 +2,62 @@
 
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
+import { toast } from "react-toastify";
 
-
-
-const GivePermissions = ({roles, permissions, url}) => {
+const GivePermissions = ({ roles, permissions, url }) => {
   const { register, handleSubmit, reset } = useForm();
   const [selectedRole, setSelectedRole] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [message, setMessage] = useState("");
 
   const handleRoleChange = (event) => {
     setSelectedRole(event.target.value);
     reset();
   };
 
-  const onSubmit = (data) => {
-    console.log("Selected Role:", selectedRole);
-    console.log("Selected Permissions:", data.permissions || []);
+  const onSubmit = async (data) => {
+    if (!selectedRole) {
+      setMessage("Please select a role.");
+      return;
+    }
+
+    const payload = {
+      roleId: selectedRole,
+      permissionIds: data.permissionIds || [],
+    };
+
+    if (payload.permissionIds.length === 0) {
+      setMessage("Please select at least one permission.");
+      return;
+    }
+
+    try {
+      setIsSubmitting(true);
+      setMessage("");
+
+      const response = await fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ ...payload }),
+      });
+
+      const result = await response.json();
+
+      if (response.ok) {
+        toast.success("Permissions assigned successfully");
+        reset();
+        setSelectedRole("");
+      } else {
+        toast.error("Failed to assign permissions");
+      }
+    } catch (error) {
+      // toast.error("An error occurred while saving permissions");
+      setMessage("An error occurred while saving permissions.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -58,7 +99,7 @@ const GivePermissions = ({roles, permissions, url}) => {
                   id={`permission-${permission.value}`}
                   value={permission.value}
                   className="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
-                  {...register("permissions")}
+                  {...register("permissionIds")}
                 />
                 <label
                   htmlFor={`permission-${permission.value}`}
@@ -72,10 +113,19 @@ const GivePermissions = ({roles, permissions, url}) => {
 
           <button
             type="submit"
-            className="w-full bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 transition duration-300"
+            className={`w-full bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 transition duration-300 ${
+              isSubmitting ? "opacity-50 cursor-not-allowed" : ""
+            }`}
+            disabled={isSubmitting}
           >
-            Save Permissions
+            {isSubmitting ? "Saving..." : "Save Permissions"}
           </button>
+
+          {message && (
+            <p className="mt-4 text-center text-red-500 font-medium">
+              {message}
+            </p>
+          )}
         </form>
       )}
     </div>
