@@ -14,6 +14,7 @@ const rolePermissionSchema: Schema<IRolePermission> = new Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "Role",
       required: true,
+      unique: true,
     },
     permissionIds: [
       {

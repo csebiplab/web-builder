@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form";
 
 
 
-const GivePermissions = ({roles, permissions}) => {
+const GivePermissions = ({roles, permissions, url}) => {
   const { register, handleSubmit, reset } = useForm();
   const [selectedRole, setSelectedRole] = useState("");
 
@@ -39,7 +39,7 @@ const GivePermissions = ({roles, permissions}) => {
       >
         <option value="">Select a role</option>
         {roles.map((role) => (
-          <option key={role._id} value={role.value}>
+          <option key={role.value} value={role.value}>
             {role.label}
           </option>
         ))}
@@ -52,16 +52,16 @@ const GivePermissions = ({roles, permissions}) => {
           </label>
           <div className="grid grid-cols-2 gap-4 mb-4">
             {permissions.map((permission) => (
-              <div key={permission._id} className="flex items-center">
+              <div key={permission.value} className="flex items-center">
                 <input
                   type="checkbox"
-                  id={`permission-${permission._id}`}
+                  id={`permission-${permission.value}`}
                   value={permission.value}
                   className="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
                   {...register("permissions")}
                 />
                 <label
-                  htmlFor={`permission-${permission._id}`}
+                  htmlFor={`permission-${permission.value}`}
                   className="ml-2 text-sm font-medium text-gray-700"
                 >
                   {permission.label}

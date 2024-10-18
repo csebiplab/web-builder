@@ -3,6 +3,7 @@ import RolePermissionModel from "@/models/rolePermission.model";
 import { connectToDatabase } from "@/lib/connectToDb";
 import { jsonResponse } from "@/lib/response.utils";
 import { responseMessageUtilities } from "@/lib/response.message.utility";
+import * as mongoose from "mongoose";
 
 /**
  * @swagger
@@ -33,12 +34,12 @@ import { responseMessageUtilities } from "@/lib/response.message.utility";
  *             properties:
  *               roleId:
  *                 type: string
- *                 example: "64a2b3c4d5e6f7g8h9i0j1k2"
+ *                 example: "670ec85e088abcdece7638d0"
  *               permissionIds:
  *                 type: array
  *                 items:
  *                   type: string
- *                 example: ["64b2b3c4d5e6f7g8h9i0j1l2", "64b2b3c4d5e6f7g8h9i0j1m3"]
+ *                 example: ["670ecb3684cc5d50de983d18", "670eccd984cc5d50de983d1c"]
  *     responses:
  *       201:
  *         description: Role permissions assigned successfully.
@@ -84,14 +85,24 @@ export async function POST(req: Request) {
       );
     }
 
-    const newRolePermission = new RolePermissionModel({
-      roleId,
-      permissionIds,
-    });
-    await newRolePermission.save();
+    const role = await RolePermissionModel.findOne({ roleId: roleId });
+
+    if (role && role?.id) {
+      return NextResponse.json(
+        { error: "You already have given permissions for this role!" },
+        { status: 400 }
+      );
+    }
+
+    const newRolePermission = {
+      roleId: new mongoose.Types.ObjectId(roleId),
+      permissionIds: permissionIds.map((p) => new mongoose.Types.ObjectId(p)),
+    };
+
+    const res = await RolePermissionModel.create(newRolePermission);
 
     return jsonResponse(
-      newRolePermission,
+      res,
       responseMessageUtilities.message,
       responseMessageUtilities.create
     );

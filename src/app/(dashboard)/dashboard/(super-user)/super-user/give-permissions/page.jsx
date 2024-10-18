@@ -3,7 +3,6 @@ import GivePermissions from "../../../../../../components/__dashboard/SuperUser/
 
 export async function getData() {
   const apiUrl = envConfig.url;
-
   const res = await fetch(`${apiUrl}/api/dropdown/role-nd-permissions`, {
     cache: "no-store",
   });
@@ -14,5 +13,12 @@ export async function getData() {
 export default async function page() {
   const data = await getData();
 
-  return <GivePermissions roles={data?.roles} permissions={data?.permissions} />;
+  const apiUrl = envConfig.url;
+
+  const endpoint = "/api/role-permission";
+  const url = apiUrl + endpoint;
+
+  return (
+    <GivePermissions roles={data?.roles} permissions={data?.permissions} url={url} />
+  );
 }
