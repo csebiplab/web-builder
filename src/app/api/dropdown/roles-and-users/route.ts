@@ -16,14 +16,20 @@ import { responseMessageUtilities } from "@/lib/response.message.utility";
 import { jsonResponse } from "@/lib/response.utils";
 import RoleModel from "@/models/role.model";
 import UserModel from "@/models/user.model";
+import UserRoleModel from "@/models/userRole.model";
 import { NextResponse } from "next/server";
 
 export async function GET() {
   try {
     await connectToDatabase();
+
+    const userRoles = await UserRoleModel.find({ deletedAt: null });
+
+    const userIds = userRoles.map((userRole) => userRole.userId);
+
     const [roles, users] = await Promise.all([
       RoleModel.find({ deletedAt: null }),
-      UserModel.find({ deletedAt: null }),
+      UserModel.find({ deletedAt: null, _id: { $nin: userIds } }),
     ]);
 
     const rolesWithLabelValue = roles.map((role) => {
