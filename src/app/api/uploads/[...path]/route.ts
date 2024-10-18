@@ -6,7 +6,7 @@ import { Params } from "next/dist/shared/lib/router/utils/route-matcher";
 /**
  * @swagger
  * tags:
- *   name: Get File
+ *   name: File upload and retrive
  *   description: Get upload files.
  */
 
@@ -14,7 +14,7 @@ import { Params } from "next/dist/shared/lib/router/utils/route-matcher";
  * @swagger
  * /api/uploads/{path*}:
  *   get:
- *     tags: [Get File]
+ *     tags: [File upload and retrive]
  *     description: Retrieves a file from the server based on the provided path.
  *     parameters:
  *       - name: path
