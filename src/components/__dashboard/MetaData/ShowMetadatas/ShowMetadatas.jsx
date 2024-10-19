@@ -1,9 +1,9 @@
 "use client";
 
-import NoDataFound from "@/components/__shared/dashboard/NoDataFound";
-import RemoveBtn from "@/components/__shared/dashboard/RemoveBtn";
 import Link from "next/link";
 import { HiPencilAlt } from "react-icons/hi";
+import NoDataFound from "../../NoDataFound/NoDataFound";
+import DeleteDocument from "../../DeleteDocument";
 
 export default function ShowMetadatas({ data }) {
   return data && data.length > 0 ? (
@@ -52,7 +52,7 @@ export default function ShowMetadatas({ data }) {
                   <Link href={`/dashboard/allpages/edit-metadata/${item?._id}`}>
                     <HiPencilAlt size={24} />
                   </Link>
-                  <RemoveBtn id={item?._id} pagename={item?.pagename} />
+                  <DeleteDocument url={""} redirectPath={""} />
                 </div>
               </td>
             </tr>

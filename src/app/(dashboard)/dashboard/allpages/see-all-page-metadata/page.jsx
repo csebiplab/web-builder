@@ -1,17 +1,21 @@
-import ShowMetadatas from "@/components/__dashboard/ShowMetadatas/ShowMetadatas";
+import { envConfig } from "@/lib/envConfig";
+import ShowMetadatas from "../../../../../components/__dashboard/MetaData/ShowMetadatas/ShowMetadatas";
+import getCurrentUser from "@/lib/session";
 
-export async function getAllMetadata() {
-    const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+export async function getData() {
+  const user = await getCurrentUser();
+  const apiUrl = envConfig?.url;
 
-    const metaDataResponse = await fetch(`${apiUrl}/api/metaDatas`, {
-        cache: "no-store",
-    });
-    const metaData = await metaDataResponse.json();
-    return metaData;
+  
+  const res = await fetch(`${apiUrl}/api/metadata?projectFor=${user?.role}`, {
+    cache: "no-store",
+  });
+  const data = await res.json();
+  return data?.data;
 }
 
 export default async function page() {
-    const metaDatas = await getAllMetadata();
+  const data = await getData();
 
-    return <ShowMetadatas data={metaDatas?.data} />
+  return <ShowMetadatas data={data} />;
 }
