@@ -5,10 +5,13 @@ import getCurrentUser from "@/lib/session";
 export async function DashboardSidebar() {
   const user = await getCurrentUser();
 
+  const menus = dashboardConfig?.sidebarNav;
+  const permissions = user?.permissions;
+
   let permissableMenus = dashboardConfig.sidebarNav;
   if (user?.role !== "Super Admin") {
-    permissableMenus = dashboardConfig.sidebarNav.filter((item) =>
-      user?.permissions?.includes(item?.permissionName)
+    permissableMenus = menus?.filter((menu) =>
+      permissions?.some((permission) => permission.name === menu.permissionName)
     );
   }
 
