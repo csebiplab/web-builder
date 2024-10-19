@@ -1,22 +1,10 @@
-"use client";
+import getCurrentUser from "@/lib/session";
+import CreateAndUpdateFormForPageMeta from "../../../../../components/__dashboard/MetaData/CreateAndUpdateFormForPageMeta/CreateAndUpdateFormForPageMeta";
 
-import CreateAndUpdateFormForPageMeta from "@/components/__shared/dashboard/CreateAndUpdateFormForPageMeta";
-import { useState } from "react";
+const page = async () => {
+  const user = await getCurrentUser();
 
-
-const page = () => {
-    const [isUpdateCreateLoading, setIsUpdateCreateLoading] = useState(false);
-
-
-    return (
-        <>
-            <CreateAndUpdateFormForPageMeta
-                isUpdateCreateLoading={isUpdateCreateLoading}
-                setIsUpdateCreateLoading={setIsUpdateCreateLoading}
-            />
-        </>
-    );
+  return <CreateAndUpdateFormForPageMeta user={user} />;
 };
 
 export default page;
-
