@@ -4,6 +4,7 @@ import { jsonResponse } from "@/lib/response.utils";
 import { responseMessageUtilities } from "@/lib/response.message.utility";
 import MetaDataModel, { IMetaData } from "@/models/metadata.model";
 import { connectToDatabase } from "@/lib/connectToDb";
+import { AdminEnum } from "@/models/role.model";
 
 /**
  * @swagger
@@ -73,54 +74,54 @@ export async function POST(request: NextRequest) {
 
 /**
  * @swagger
- * /api/metadata/{slug}:
+ * /api/metadata:
  *   get:
  *     tags: [MetaData]
- *     description: Get metadata by ID or pageLink (slug).
+ *     summary: Get metadata by project scope and optionally by pageLink.
+ *     description: Fetch metadata based on the project scope using the `projectFor` query parameter. Optionally, filter by `pageLink`.
  *     parameters:
- *       - in: path
- *         name: slug
- *         required: true
+ *       - in: query
+ *         name: projectFor
+ *         required: false
  *         schema:
  *           type: string
- *         description: The ID or custom link (slug) of the metadata.
+ *         description: The project scope (e.g., Admin, Super Admin).
+ *       - in: query
+ *         name: pageLink
+ *         required: false
+ *         schema:
+ *           type: string
+ *         description: Optional pageLink to filter metadata.
  *     responses:
  *       200:
  *         description: Metadata fetched successfully.
- *       404:
- *         description: Metadata not found.
  *       500:
  *         description: Internal Server Error.
  */
-
-export async function GET(
-  request: NextRequest,
-  { params }: { params: { slug: string } }
-) {
+export async function GET(request: NextRequest) {
   try {
-    const { slug } = params;
+    const searchParams = request.nextUrl.searchParams;
+    const projectFor: string | null = searchParams.get("projectFor");
+    const pageLink: string | null = searchParams.get("pageLink");
 
-    if (!slug || typeof slug !== "string") {
-      throw new Error("Invalid slug parameter");
+    const query: { projectFor?: string | null; pageLink?: string | null } = {};
+
+    if (projectFor && projectFor !== AdminEnum.SUPER_ADMIN) {
+      query["projectFor"] = projectFor;
     }
+
+    if (pageLink) {
+      query["pageLink"] = pageLink;
+    }
+
+    const projectsFields = {
+      deletedAt: 0,
+      createdAt: 0,
+      updatedAt: 0,
+    };
 
     await connectToDatabase();
-
-    let data;
-
-    if (ObjectId.isValid(slug)) {
-      data = await MetaDataModel.findOne({ _id: new ObjectId(slug) });
-    } else {
-      data = await MetaDataModel.findOne({ pageLink: slug });
-    }
-
-    if (!data) {
-      return NextResponse.json(
-        { error: "Metadata not found" },
-        { status: 404 }
-      );
-    }
-
+    const data = await MetaDataModel.find(query, { ...projectsFields });
     return jsonResponse(
       data,
       responseMessageUtilities.message,
