@@ -58,6 +58,10 @@ const MyProfile = ({ user }) => {
           <span className="font-bold text-white">User Name:</span>{" "}
           <span className="text-primary">{user?.name}</span>
         </p>
+        <p className="text-3xl text-white">
+          <span className="font-bold text-white">Role:</span>{" "}
+          <span className="text-primary">{user?.role}</span>
+        </p>
         {!isUpdating && (
           <button
             onClick={() => setIsUpdating(true)}
