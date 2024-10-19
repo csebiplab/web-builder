@@ -54,11 +54,15 @@ const MyProfile = ({ user }) => {
   return (
     <div>
       <div>
-        <p className="text-3xl text-white">
-          <span className="font-bold text-white">User Name:</span>{" "}
+        <p className="text-xl text-white">
+          <span className="font-bold text-white">Name:</span>{" "}
           <span className="text-primary">{user?.name}</span>
         </p>
-        <p className="text-3xl text-white">
+        <p className="text-xl text-white">
+          <span className="font-bold text-white">User Name:</span>{" "}
+          <span className="text-primary">{user?.username}</span>
+        </p>
+        <p className="text-xl text-white">
           <span className="font-bold text-white">Role:</span>{" "}
           <span className="text-primary">{user?.role}</span>
         </p>
