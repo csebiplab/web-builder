@@ -5,6 +5,7 @@ import { JWT } from "next-auth/jwt";
 import UserModel from "@/models/user.model";
 import mongoose from "mongoose";
 import { connectToDatabase } from "./connectToDb";
+import { envConfig } from "./envConfig";
 
 const authOptions: NextAuthOptions = {
   session: {
@@ -38,7 +39,7 @@ const authOptions: NextAuthOptions = {
         }
 
         const res = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/user/whoami?id=${user?._id}`,
+          `${envConfig?.url}/api/user/whoami?id=${user?._id}`,
           { cache: "no-store" }
         );
         const data = await res.json();
