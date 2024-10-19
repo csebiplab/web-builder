@@ -21,7 +21,7 @@ export default function DeleteDocument({
         router.refresh();
       }
       toast.success(`Successfully deleted.`);
-      return router.push(routerPath);
+      return router.push(redirectPath);
     }
   };
 
