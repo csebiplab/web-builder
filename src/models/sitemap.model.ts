@@ -30,6 +30,8 @@ const sitemapSchema = new Schema<ISitemap>(
   },
   {
     timestamps: true,
+    toObject: { virtuals: true },
+    toJSON: { virtuals: true },
   }
 );
 

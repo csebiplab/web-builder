@@ -1,8 +1,9 @@
 import { connectToDatabase } from "@/lib/connectToDb";
 import { responseMessageUtilities } from "@/lib/response.message.utility";
 import { jsonResponse } from "@/lib/response.utils";
+import { AdminEnum } from "@/models/role.model";
 import SitemapModel, { ISitemap } from "@/models/sitemap.model";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
 /**
  * @swagger
@@ -17,46 +18,40 @@ import { NextResponse } from "next/server";
  *   get:
  *     tags: [Sitemap]
  *     description: Fetch all sitemap records.
+ *     parameters:
+ *       - in: query
+ *         name: projectFor
+ *         required: false
+ *         schema:
+ *           type: string
+ *         description: The project scope (e.g., Admin, Super Admin)
  *     responses:
  *       200:
  *         description: A list of sitemap records.
- *         content:
- *           application/json:
- *             schema:
- *               type: array
- *               items:
- *                 type: object
- *                 properties:
- *                   _id:
- *                     type: string
- *                     description: The ID of the sitemap record.
- *                   projectFor:
- *                     type: string
- *                     description: The project associated with the sitemap.
- *                   changefreq:
- *                     type: string
- *                     description: The change frequency.
- *                   loc:
- *                     type: string
- *                     description: The location.
- *                   priority:
- *                     type: number
- *                     description: The priority value.
- *                   createdAt:
- *                     type: string
- *                     format: date-time
- *                     description: The creation date of the record.
- *                   updatedAt:
- *                     type: string
- *                     format: date-time
- *                     description: The last update date of the record.
  *       500:
  *         description: Server error.
  */
-export async function GET() {
+export async function GET(request: NextRequest) {
   try {
+    const searchParams = request.nextUrl.searchParams;
+    const projectFor: string | null = searchParams.get("projectFor");
+
+    const query: { projectFor?: string | null } = {};
+
+    if (projectFor && projectFor !== AdminEnum.SUPER_ADMIN) {
+      query["projectFor"] = projectFor;
+    }
+
+    const projectsFields = {
+      deletedAt: 0,
+      createdAt: 0,
+      updatedAt: 0,
+    };
+
     await connectToDatabase();
-    const data = await SitemapModel.find();
+    const data = await SitemapModel.find(query, {
+      ...projectsFields,
+    });
 
     return jsonResponse(
       data,
@@ -65,7 +60,10 @@ export async function GET() {
     );
   } catch (error) {
     console.error("Error:", error);
-    return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
+    return NextResponse.json(
+      { error: "Internal Server Error" },
+      { status: 500 }
+    );
   }
 }
 
@@ -104,19 +102,25 @@ export async function GET() {
  */
 export async function POST(request: Request) {
   try {
-    const payload: Omit<ISitemap, "_id" | "createdAt" | "updatedAt" | "deletedAt"> = await request.json();
+    const payload: Omit<
+      ISitemap,
+      "_id" | "createdAt" | "updatedAt" | "deletedAt"
+    > = await request.json();
 
     await connectToDatabase();
     const newSitemap = await SitemapModel.create(payload);
 
     return jsonResponse(
-        newSitemap,
-        responseMessageUtilities.message,
-        responseMessageUtilities.create
-      );
+      newSitemap,
+      responseMessageUtilities.message,
+      responseMessageUtilities.create
+    );
   } catch (error) {
     console.error("Error:", error);
-    return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
+    return NextResponse.json(
+      { error: "Internal Server Error" },
+      { status: 500 }
+    );
   }
 }
 
@@ -159,16 +163,22 @@ export async function DELETE(request: Request) {
     );
 
     if (!deletedSitemap) {
-      return NextResponse.json({ error: "Sitemap record not found" }, { status: 404 });
+      return NextResponse.json(
+        { error: "Sitemap record not found" },
+        { status: 404 }
+      );
     }
 
     return jsonResponse(
-        deletedSitemap,
-        responseMessageUtilities.message,
-        responseMessageUtilities.success
-      );
+      deletedSitemap,
+      responseMessageUtilities.message,
+      responseMessageUtilities.success
+    );
   } catch (error) {
     console.error("Error:", error);
-    return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
+    return NextResponse.json(
+      { error: "Internal Server Error" },
+      { status: 500 }
+    );
   }
 }

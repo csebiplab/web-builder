@@ -3,7 +3,7 @@
 import Link from "next/link";
 import React from "react";
 import { HiPencilAlt } from "react-icons/hi";
-import DeleteDocument from "../DeleteDocument";
+import DeleteDocumentBtn from "./../Actions/DeleteDocumentBtn";
 
 const ShowSitemaps = ({ data }) => {
   return (
@@ -28,7 +28,7 @@ const ShowSitemaps = ({ data }) => {
               </tr>
             </thead>
             <tbody>
-              {data?.data?.map((item) => (
+              {data?.map((item) => (
                 <tr
                   key={item._id}
                   className="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700"
@@ -43,12 +43,12 @@ const ShowSitemaps = ({ data }) => {
                   <td className="px-6 py-4">{item?.priority}</td>
                   <td className="px-6 py-4">
                     <div className="flex gap-2">
-                      <Link href={`/dashboard/siteMap/${item?._id}`}>
+                      <Link href={`/dashboard/sitemap/${item?._id}`}>
                         <HiPencilAlt size={24} />
                       </Link>
-                      <DeleteDocument
-                        url="/"
-                        routerPath="/dashboard/admin/profile"
+                      <DeleteDocumentBtn
+                        url={`/api/sitemap?id=${id}`}
+                        routerPath="/dashboard/sitemap"
                       />
                     </div>
                   </td>
@@ -61,7 +61,7 @@ const ShowSitemaps = ({ data }) => {
         <div className="mt-40 text-center">
           <p className="text-3xl text-center">No Data Found!</p>
           <Link
-            href="/dashboard/siteMap"
+            href="/dashboard/sitemap"
             className="mt-5 px-5 py-3 bg-primary-700  text-white"
           >
             Add Sitemaps
