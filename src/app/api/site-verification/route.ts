@@ -1,8 +1,11 @@
 import { connectToDatabase } from "@/lib/connectToDb";
 import { responseMessageUtilities } from "@/lib/response.message.utility";
 import { jsonResponse } from "@/lib/response.utils";
-import SiteVerificationModel, { ISiteVerification } from "@/models/siteVerification.model";
-import { NextResponse } from "next/server";
+import { AdminEnum } from "@/models/role.model";
+import SiteVerificationModel, {
+  ISiteVerification,
+} from "@/models/siteVerification.model";
+import { NextRequest, NextResponse } from "next/server";
 
 /**
  * @swagger
@@ -55,10 +58,10 @@ export async function POST(request: Request) {
     const data = await SiteVerificationModel.create(payload);
 
     return jsonResponse(
-        data,
-        responseMessageUtilities.message,
-        responseMessageUtilities.create
-      );
+      data,
+      responseMessageUtilities.message,
+      responseMessageUtilities.create
+    );
   } catch (error) {
     console.error("Error:", error);
     return NextResponse.json(
@@ -74,48 +77,46 @@ export async function POST(request: Request) {
  *   get:
  *     tags: [SiteVerification]
  *     description: Fetch all site verifications.
+ *     parameters:
+ *       - in: query
+ *         name: projectFor
+ *         required: false
+ *         schema:
+ *           type: string
+ *         description: The project scope (e.g., Admin, Super Admin)
  *     responses:
  *       200:
  *         description: A list of site verifications.
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                 data:
- *                   type: array
- *                   items:
- *                     type: object
- *                     properties:
- *                       _id:
- *                         type: string
- *                       projectFor:
- *                         type: string
- *                       title:
- *                         type: string
- *                       url:
- *                         type: string
- *                       createdAt:
- *                         type: string
- *                         format: date-time
- *                       updatedAt:
- *                         type: string
- *                         format: date-time
  *       500:
  *         description: Server error.
  */
-export async function GET() {
+export async function GET(request: NextRequest) {
   try {
+    const searchParams = request.nextUrl.searchParams;
+    const projectFor: string | null = searchParams.get("projectFor");
+
+    const query: { projectFor?: string | null } = {};
+
+    if (projectFor && projectFor !== AdminEnum.SUPER_ADMIN) {
+      query["projectFor"] = projectFor;
+    }
+
+    const projectsFields = {
+      deletedAt: 0,
+      createdAt: 0,
+      updatedAt: 0,
+    };
+
     await connectToDatabase();
-    const data: ISiteVerification[] = await SiteVerificationModel.find();
+    const data: ISiteVerification[] = await SiteVerificationModel.find(query, {
+      ...projectsFields,
+    });
 
     return jsonResponse(
-        data,
-        responseMessageUtilities.message,
-        responseMessageUtilities.success
-      );
+      data,
+      responseMessageUtilities.message,
+      responseMessageUtilities.success
+    );
   } catch (error) {
     console.error("Error:", error);
     return NextResponse.json(
@@ -181,10 +182,10 @@ export async function DELETE(request: Request) {
     }
 
     return jsonResponse(
-        deletedDoc,
-        responseMessageUtilities.message,
-        responseMessageUtilities.success
-      );
+      deletedDoc,
+      responseMessageUtilities.message,
+      responseMessageUtilities.success
+    );
   } catch (error) {
     console.error("Error:", error);
     return NextResponse.json(

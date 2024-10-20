@@ -14,9 +14,12 @@ const siteVerificationSchema = new Schema<ISiteVerification>(
     projectFor: { type: String, required: true },
     title: { type: String, required: true },
     url: { type: String, required: true },
+    deletedAt: { type: Date, default: null },
   },
   {
     timestamps: true,
+    toObject: { virtuals: true },
+    toJSON: { virtuals: true },
   }
 );
 

@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { HiPencilAlt } from "react-icons/hi";
 import NoDataFound from "../../NoDataFound/NoDataFound";
-import DeleteDocument from "../../DeleteDocument";
+import DeleteDocumentBtn from "../../Actions/DeleteDocumentBtn";
 
 export default function ShowMetadatas({ data }) {
   return data && data.length > 0 ? (
@@ -52,7 +52,7 @@ export default function ShowMetadatas({ data }) {
                   <Link href={`/dashboard/allpages/edit-metadata/${item?._id}`}>
                     <HiPencilAlt size={24} />
                   </Link>
-                  <DeleteDocument url={""} redirectPath={""} />
+                  <DeleteDocumentBtn url={""} redirectPath={""} />
                 </div>
               </td>
             </tr>

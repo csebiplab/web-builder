@@ -4,7 +4,7 @@ import { HiOutlineTrash } from "react-icons/hi";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 
-export default function DeleteDocument({
+export default function DeleteDocumentBtn({
   url = "http://localhost:3000",
   redirectPath = "/dashboard/admin/profile",
 }) {

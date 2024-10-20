@@ -83,24 +83,24 @@ export const dashboardConfig = {
         },
         {
             title: "Seo",
-            href: "/dashboard/siteVerification",
+            href: "/dashboard/seo",
             icon: "boxes",
             submenu: true,
             permissionName: "SEO",
             submenus: [
                 {
                     title: "Site Verification",
-                    href: "/dashboard/siteVerification",
+                    href: "/dashboard/site-verification",
                     icon: "dessert",
                 },
                 {
                     title: "Sitemap",
-                    href: "/dashboard/siteMap",
+                    href: "/dashboard/sitemap",
                     icon: "dessert",
                 },
                 {
                     title: "RobotTXT",
-                    href: "/dashboard/robottxt",
+                    href: "/dashboard/robot-txt",
                     icon: "dessert",
                 },
             ],
