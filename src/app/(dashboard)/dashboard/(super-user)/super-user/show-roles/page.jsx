@@ -1,7 +1,7 @@
 import { envConfig } from "@/lib/envConfig";
 import { ShowAllRoles } from "../../../../../../components/__dashboard/SuperUser/ShowAllRoles/ShowAllRoles";
 
-export async function getData() {
+async function getData() {
   const apiUrl = envConfig.url;
 
   const res = await fetch(`${apiUrl}/api/role`, {

@@ -2,7 +2,7 @@ import getCurrentUser from "@/lib/session";
 import SiteverificationCreateNdShow from "../../../../components/__dashboard/Siteverification/SiteverificationCreateNdShow";
 import { envConfig } from "@/lib/envConfig";
 
-export async function getData(user) {
+async function getData(user) {
   const apiUrl = envConfig.url;
 
   const res = await fetch(`${apiUrl}/api/site-verification?${user?.role}`, {

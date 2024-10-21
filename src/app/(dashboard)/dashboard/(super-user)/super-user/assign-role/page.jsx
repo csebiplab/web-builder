@@ -1,7 +1,7 @@
 import AssignRole from "../../../../../../components/__dashboard/SuperUser/AssignRole/AssignRole";
 import { envConfig } from "@/lib/envConfig";
 
-export async function getData() {
+async function getData() {
   const apiUrl = envConfig.url;
   const res = await fetch(`${apiUrl}/api/dropdown/roles-and-users`, {
     cache: "no-store",
