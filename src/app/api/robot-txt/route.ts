@@ -2,7 +2,8 @@ import { connectToDatabase } from "@/lib/connectToDb";
 import { responseMessageUtilities } from "@/lib/response.message.utility";
 import { jsonResponse } from "@/lib/response.utils";
 import RobotTxtModel, { IRobotTxt } from "@/models/robotTxt.model";
-import { NextResponse } from "next/server";
+import { AdminEnum } from "@/models/role.model";
+import { NextRequest, NextResponse } from "next/server";
 
 /**
  * @swagger
@@ -17,58 +18,52 @@ import { NextResponse } from "next/server";
  *   get:
  *     tags: [RobotTxt]
  *     description: Fetch all robot.txt records.
+ *     parameters:
+ *       - in: query
+ *         name: projectFor
+ *         required: false
+ *         schema:
+ *           type: string
+ *         description: The project scope (e.g., Admin, Super Admin)
  *     responses:
  *       200:
  *         description: A list of robot.txt records.
- *         content:
- *           application/json:
- *             schema:
- *               type: array
- *               items:
- *                 type: object
- *                 properties:
- *                   _id:
- *                     type: string
- *                     description: The ID of the robot.txt record.
- *                   projectFor:
- *                     type: string
- *                     description: The project associated with the robot.txt.
- *                   sitemap_url:
- *                     type: string
- *                     description: The sitemap URL.
- *                   user_agent:
- *                     type: string
- *                     description: The user agent.
- *                   allow:
- *                     type: string
- *                     description: The allowed paths.
- *                   disallow:
- *                     type: string
- *                     description: The disallowed paths.
- *                   createdAt:
- *                     type: string
- *                     format: date-time
- *                     description: The creation date of the record.
- *                   updatedAt:
- *                     type: string
- *                     format: date-time
- *                     description: The last update date of the record.
  *       500:
  *         description: Server error.
  */
-export async function GET() {
+export async function GET(request: NextRequest) {
   try {
+    const searchParams = request.nextUrl.searchParams;
+    const projectFor: string | null = searchParams.get("projectFor");
+
+    const query: { projectFor?: string | null } = {};
+
+    if (projectFor && projectFor !== AdminEnum.SUPER_ADMIN) {
+      query["projectFor"] = projectFor;
+    }
+
+    const projectsFields = {
+      deletedAt: 0,
+      createdAt: 0,
+      updatedAt: 0,
+    };
+
     await connectToDatabase();
-    const data = await RobotTxtModel.find();
+    const data = await RobotTxtModel.find(query, {
+      ...projectsFields,
+    });
 
     return jsonResponse(
-        data,
-        responseMessageUtilities.message,
-        responseMessageUtilities.success
-      );
+      data,
+      responseMessageUtilities.message,
+      responseMessageUtilities.success
+    );
   } catch (error) {
     console.error("Error:", error);
-    return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
+    return NextResponse.json(
+      { error: "Internal Server Error" },
+      { status: 500 }
+    );
   }
 }
 
@@ -110,19 +105,25 @@ export async function GET() {
  */
 export async function POST(request: Request) {
   try {
-    const payload: Omit<IRobotTxt, "_id" | "createdAt" | "updatedAt" | "deletedAt"> = await request.json();
+    const payload: Omit<
+      IRobotTxt,
+      "_id" | "createdAt" | "updatedAt" | "deletedAt"
+    > = await request.json();
 
     await connectToDatabase();
     const newRobotTxt = await RobotTxtModel.create(payload);
 
     return jsonResponse(
-        newRobotTxt,
-        responseMessageUtilities.message,
-        responseMessageUtilities.create
-      );
+      newRobotTxt,
+      responseMessageUtilities.message,
+      responseMessageUtilities.create
+    );
   } catch (error) {
     console.error("Error:", error);
-    return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
+    return NextResponse.json(
+      { error: "Internal Server Error" },
+      { status: 500 }
+    );
   }
 }
 
@@ -165,16 +166,22 @@ export async function DELETE(request: Request) {
     );
 
     if (!deletedRobotTxt) {
-      return NextResponse.json({ error: "Robot.txt record not found" }, { status: 404 });
+      return NextResponse.json(
+        { error: "Robot.txt record not found" },
+        { status: 404 }
+      );
     }
 
     return jsonResponse(
-        deletedRobotTxt,
-        responseMessageUtilities.message,
-        responseMessageUtilities.success
-      );
+      deletedRobotTxt,
+      responseMessageUtilities.message,
+      responseMessageUtilities.success
+    );
   } catch (error) {
     console.error("Error:", error);
-    return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
+    return NextResponse.json(
+      { error: "Internal Server Error" },
+      { status: 500 }
+    );
   }
 }
