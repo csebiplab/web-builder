@@ -47,7 +47,7 @@ const ShowSitemaps = ({ data }) => {
                         <HiPencilAlt size={24} />
                       </Link>
                       <DeleteDocumentBtn
-                        url={`/api/sitemap?id=${id}`}
+                        url={`/api/sitemap?id=${item?._id}`}
                         routerPath="/dashboard/sitemap"
                       />
                     </div>
