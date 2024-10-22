@@ -6,13 +6,15 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { signIn } from "next-auth/react";
 import { toast } from "react-toastify";
+import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai"; // Import eye icons
 
 const providers = {
   CREDENTIALS: "credentials",
 };
 
-export default function () {
+export default function SignIn() {
   const [isLoading, setIsLoading] = useState(false);
+  const [showpass, setShowpass] = useState(false); // State for password visibility
   const { register, handleSubmit, reset } = useForm();
   const router = useRouter();
 
@@ -39,7 +41,6 @@ export default function () {
       }
 
       if (res.ok && res?.error == null) {
-        // return router.push("/dashboard");
         router.push("/dashboard/admin/profile");
       }
     } catch (error) {
@@ -49,6 +50,7 @@ export default function () {
       setIsLoading(false);
     }
   }
+
   return (
     <main className="min-h-screen flex justify-center items-center px-2 py-10">
       <Card color="transparent" shadow={false}>
@@ -70,13 +72,26 @@ export default function () {
               label="User Name"
               name="username"
             />
-            <Input
-              {...register("password", { required: true })}
-              type="password"
-              size="lg"
-              label="Password"
-              name="password"
-            />
+            <div className="relative">
+              <Input
+                {...register("password", { required: true })}
+                type={showpass ? "text" : "password"} // Dynamic input type
+                size="lg"
+                label="Password"
+                name="password"
+              />
+              {/* Eye icon to toggle password visibility */}
+              <div
+                className="absolute right-3 top-1/2 transform -translate-y-1/2 cursor-pointer"
+                onClick={() => setShowpass(!showpass)}
+              >
+                {showpass ? (
+                  <AiFillEyeInvisible size={24} />
+                ) : (
+                  <AiFillEye size={24} />
+                )}
+              </div>
+            </div>
           </div>
           <Button
             aria-label="Form submit button"
@@ -85,7 +100,7 @@ export default function () {
             disabled={isLoading}
             fullWidth
           >
-            {isLoading ? `Loading...` : `Sing In`}
+            {isLoading ? `Loading...` : `Sign In`}
           </Button>
         </form>
       </Card>
