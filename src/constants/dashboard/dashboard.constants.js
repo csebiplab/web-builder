@@ -100,7 +100,7 @@ export const dashboardConfig = {
                 },
                 {
                     title: "RobotTXT",
-                    href: "/dashboard/robot-txt",
+                    href: "/dashboard/robot/create-robot-txt",
                     icon: "dessert",
                 },
             ],
