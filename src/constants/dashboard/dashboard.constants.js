@@ -8,7 +8,6 @@ export const dashboardConfig = {
         },
         {
             title: "Super User",
-            href: "/dashboard/super-user",
             icon: "users",
             submenu: true,
             permissionName: "Users",
@@ -63,7 +62,6 @@ export const dashboardConfig = {
         },
         {
             title: "Pages",
-            href: "/dashboard/allpages/home",
             icon: "boxes",
             submenu: true,
             permissionName: "Pages",
@@ -83,7 +81,6 @@ export const dashboardConfig = {
         },
         {
             title: "Seo",
-            href: "/dashboard/seo",
             icon: "boxes",
             submenu: true,
             permissionName: "SEO",
@@ -107,19 +104,18 @@ export const dashboardConfig = {
         },
         {
             title: "Blogs",
-            href: "/dashboard/blogs",
             icon: "boxes",
             submenu: true,
             permissionName: "Blogs",
             submenus: [
                 {
                     title: "All Blog",
-                    href: "/dashboard/blogs",
+                    href: "/dashboard/blogs/show-blogs",
                     icon: "dessert",
                 },
                 {
                     title: "Add New",
-                    href: "/dashboard/blogs/addNew",
+                    href: "/dashboard/blogs/create-blog",
                     icon: "dessert",
                 },
             ],

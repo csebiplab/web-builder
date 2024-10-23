@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 import BlogContentEditor from "./BlogContentEditor";
 
-function CreateBlog({ id, data }) {
+function CreateBlog({ id, data, user }) {
   const router = useRouter();
   const [inputValue, setInputValue] = useState({
     blogTitle: "",
@@ -15,8 +15,6 @@ function CreateBlog({ id, data }) {
     shortDescription: "",
     content: "",
   });
-
-  const baseAPIUrl = process.env.NEXT_PUBLIC_API_URL;
 
   useEffect(() => {
     if (data) {
@@ -46,7 +44,7 @@ function CreateBlog({ id, data }) {
   const handleSubmit = async () => {
     if (id) {
       try {
-        const res = await fetch(`${baseAPIUrl}/api/blogContent/${id}`, {
+        const res = await fetch(`/api/blogContent/${id}`, {
           method: "PATCH",
           headers: {
             "Content-type": "application/json",
@@ -68,13 +66,14 @@ function CreateBlog({ id, data }) {
       }
     } else {
       try {
-        const res = await fetch(`${baseAPIUrl}/api/blogContent`, {
+        const res = await fetch(`/api/blogContent`, {
           method: "POST",
           headers: {
             "Content-type": "application/json",
           },
           body: JSON.stringify({
             ...inputValue,
+            projectFor: user?.role,
           }),
         });
 
