@@ -1,31 +1,35 @@
 "use client";
 
+import { envConfig } from "@/lib/envConfig";
 import { signOut } from "next-auth/react";
-import { useState } from "react";
+import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 
 const MyProfile = ({ user }) => {
-  const [isUpdating, setIsUpdating] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+  } = useForm();
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-    setIsLoading(true);
+  const onSubmit = async (data) => {
+    const { newUsername, currentPassword, newPassword } = data;
 
-    const currentUserName = user?.name;
-    const newUserName = event.target.newUsername.value;
-    const currentPassword = event.target.currentPassword.value;
-    const newPassword = event.target.newPassword.value;
+    // Custom condition: Ensure that the new username or new password is provided
+    if (!newUsername && !newPassword) {
+      toast.error("Please provide a new username or password.");
+      return;
+    }
 
     try {
-      const response = await fetch(`/api/admin`, {
+      const response = await fetch(`/api/user`, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          currentUserName,
-          newUserName,
+          currentUserName: user?.name,
+          newUserName: newUsername,
           currentPassword,
           newPassword,
         }),
@@ -36,18 +40,12 @@ const MyProfile = ({ user }) => {
         throw new Error(errorData.error);
       }
 
-      // If successful response
-      const data = await response.json();
+      const responseData = await response.json();
+      await signOut({ callbackUrl: `${envConfig?.url}/signin` });
 
-      // After update the profile signout the admin
-      await signOut({ callbackUrl: `${process.env.NEXT_PUBLIC_API_URL}` });
-
-      toast.success(data?.message);
-      setIsLoading(false);
-      setIsUpdating(false);
+      toast.success(responseData?.message);
     } catch (error) {
       console.error("Error:", error.message);
-      setIsLoading(false);
     }
   };
 
@@ -66,61 +64,69 @@ const MyProfile = ({ user }) => {
           <span className="font-bold text-white">Role:</span>{" "}
           <span className="text-primary">{user?.role}</span>
         </p>
-        {!isUpdating && (
-          <button
-            onClick={() => setIsUpdating(true)}
-            className="mt-8 bg-red-800 px-3 py-1 text-white"
-          >
-            Update
-          </button>
-        )}
+        <button
+          onClick={() => setIsUpdating(true)}
+          className="mt-8 bg-red-800 px-3 py-1 text-white"
+        >
+          Update
+        </button>
       </div>
       <div className="mt-6">
-        {isUpdating && (
-          <form onSubmit={handleSubmit}>
-            <div className="flex flex-col gap-4">
-              <div className="flex flex-col">
-                <label className="text-white">New Username</label>
-                <input
-                  type="text"
-                  placeholder="New username"
-                  name="newUsername"
-                  //   required
-                  autoComplete="off"
-                />
-              </div>
-              <div className="flex flex-col">
-                <label className="text-white">Current password</label>
-                <input
-                  type="password"
-                  placeholder="********"
-                  name="currentPassword"
-                  required
-                  autoComplete="off"
-                />
-              </div>
-              <div className="flex flex-col">
-                <label className="text-white">New password</label>
-                <input
-                  type="password"
-                  placeholder="********"
-                  name="newPassword"
-                  //   required
-                  autoComplete="off"
-                />
-              </div>
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <div className="flex flex-col gap-4">
+            <div className="flex flex-col">
+              <label className="text-white">New Username</label>
+              <input
+                type="text"
+                placeholder="New username"
+                {...register("newUsername", {
+                  required: "New username is required.",
+                })}
+                autoComplete="off"
+              />
+              {errors.newUsername && (
+                <p className="text-red-500">{errors.newUsername.message}</p>
+              )}
             </div>
+            <div className="flex flex-col">
+              <label className="text-white">Current password</label>
+              <input
+                type="password"
+                placeholder="********"
+                {...register("currentPassword", {
+                  required: "Current password is required.",
+                })}
+                autoComplete="off"
+              />
+              {errors.currentPassword && (
+                <p className="text-red-500">{errors.currentPassword.message}</p>
+              )}
+            </div>
+            <div className="flex flex-col">
+              <label className="text-white">New password</label>
+              <input
+                type="password"
+                placeholder="********"
+                {...register("newPassword", {
+                  required: "New password is required.",
+                })}
+                autoComplete="off"
+              />
+              {errors.newPassword && (
+                <p className="text-red-500">{errors.newPassword.message}</p>
+              )}
+            </div>
+          </div>
 
-            <button
-              type="submit"
-              className={`bg-red-700 text-white mt-6 px-3 py-1`}
-              disabled={isLoading ? true : false}
-              aria-label="Submit"
-            >
-              {isLoading ? "Updating..." : "Update"}
-            </button>
-          </form>
-        )}
+          <button
+            type="submit"
+            className={`bg-red-700 text-white mt-6 px-3 py-1`}
+            disabled={isSubmitting}
+            aria-label="Submit"
+          >
+            {isSubmitting ? "Updating..." : "Update"}
+          </button>
+        </form>
       </div>
     </div>
   );
