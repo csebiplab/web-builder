@@ -35,17 +35,22 @@ function CreateSitemap({ data, user }) {
 
   const handleSubmit = async () => {
     const { changefreq, loc, priority } = inputValue;
+    const payload = id ? {
+        changefreq,
+        loc,
+        priority,
+      } : {
+        changefreq,
+        loc,
+        priority,
+        projectFor: user?.role,
+      }
     const requestOptions = {
       method: id ? "PATCH" : "POST",
       headers: {
         "Content-type": "application/json",
       },
-      body: JSON.stringify({
-        changefreq,
-        loc,
-        priority,
-        projectFor: user?.role,
-      }),
+      body: JSON.stringify(payload),
     };
 
     try {
@@ -53,10 +58,9 @@ function CreateSitemap({ data, user }) {
       const res = await fetch(apiUrl, requestOptions);
       if (res.ok) {
         toast.success(`Successfully ${id ? "updated" : "submitted"} sitemap`);
-        router.refresh();
-        router.push("/dashboard/sitemap");
+        return router.push("/dashboard/sitemap/show-all-sitemaps");
       } else {
-        throw new Error(`Failed to ${id ? "update" : "create"} sitemap`);
+        toast.error(`Failed to ${id ? "update" : "create"} sitemap`);
       }
     } catch (error) {
       toast.error(error.message);

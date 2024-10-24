@@ -1,9 +1,8 @@
 import CreateSitemap from "../../../../../../components/__dashboard/SitemapComponents/CreateSitemap";
+import { envConfig } from "./../../../../../../lib/envConfig";
 
 async function getData(id) {
-  const apiUrl = process.env.NEXT_PUBLIC_API_URL;
-
-  const res = await fetch(`${apiUrl}/api/sitemap/${id}`, {
+  const res = await fetch(`${envConfig?.url}/api/sitemap/${id}`, {
     cache: "no-store",
   });
   const { data } = await res.json();
