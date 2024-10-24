@@ -13,6 +13,13 @@ import { ObjectId } from "mongodb";
  *   patch:
  *     tags: [User]
  *     description: Update a user
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: The ID of the User record to update.
+ *         schema:
+ *           type: string
  *     requestBody:
  *       content:
  *         application/json:
@@ -31,7 +38,7 @@ import { ObjectId } from "mongodb";
  *       201:
  *         description: User created successfully
  */
-export async function Patch(
+export async function PATCH(
   request: NextRequest,
   { params }: { params: Params }
 ) {
