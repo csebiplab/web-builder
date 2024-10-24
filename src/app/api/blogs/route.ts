@@ -4,6 +4,7 @@ import convertToLink from "@/helpers/trimSpace";
 import { connectToDatabase } from "@/lib/connectToDb";
 import { jsonResponse } from "@/lib/response.utils";
 import { responseMessageUtilities } from "@/lib/response.message.utility";
+import { AdminEnum } from "@/models/role.model";
 
 /**
  * @swagger
@@ -14,38 +15,20 @@ import { responseMessageUtilities } from "@/lib/response.message.utility";
 
 /**
  * @swagger
- * /api/blog:
+ * /api/blogs:
  *   get:
  *     tags: [Blog]
  *     description: Fetch all blogs.
+ *     parameters:
+ *       - in: query
+ *         name: projectFor
+ *         required: false
+ *         schema:
+ *           type: string
+ *         description: The project scope (e.g., Admin, Super Admin).
  *     responses:
  *       200:
  *         description: A list of blogs.
- *         content:
- *           application/json:
- *             schema:
- *               type: array
- *               items:
- *                 type: object
- *                 properties:
- *                   _id:
- *                     type: string
- *                   projectFor:
- *                     type: string
- *                   blogTitle:
- *                     type: string
- *                   metaTitle:
- *                     type: string
- *                   customLink:
- *                     type: string
- *                   metaDescription:
- *                     type: string
- *                   metaKeywords:
- *                     type: string
- *                   shortDescription:
- *                     type: string
- *                   content:
- *                     type: string
  *       500:
  *         description: Server error.
  *   post:
@@ -113,10 +96,25 @@ export async function POST(request: Request) {
   }
 }
 
-export async function GET() {
+export async function GET(request: NextRequest) {
   try {
+    const searchParams = request.nextUrl.searchParams;
+    const projectFor: string | null = searchParams.get("projectFor");
+
+    const query: { projectFor?: string | null; pageLink?: string | null } = {};
+
+    if (projectFor && projectFor !== AdminEnum.SUPER_ADMIN) {
+      query["projectFor"] = projectFor;
+    }
+
+    const projectsFields = {
+      deletedAt: 0,
+      createdAt: 0,
+      updatedAt: 0,
+    };
+
     await connectToDatabase();
-    const data = await BlogModel.find();
+    const data = await BlogModel.find(query, { ...projectsFields });
 
     return jsonResponse(
       data,
