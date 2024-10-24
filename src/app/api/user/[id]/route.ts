@@ -7,7 +7,6 @@ import { Params } from "next/dist/shared/lib/router/utils/route-matcher";
 import { NextRequest, NextResponse } from "next/server";
 import { ObjectId } from "mongodb";
 
-
 /**
  * @swagger
  * /api/user/{id}:
