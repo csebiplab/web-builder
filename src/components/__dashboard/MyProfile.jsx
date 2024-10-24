@@ -2,10 +2,12 @@
 
 import { envConfig } from "@/lib/envConfig";
 import { signOut } from "next-auth/react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 
 const MyProfile = ({ user }) => {
+  const [isUpdateBtnClick, setUpdateBtnClick] = useState(false);
   const {
     register,
     handleSubmit,
@@ -65,14 +67,17 @@ const MyProfile = ({ user }) => {
           <span className="font-bold text-white">Role:</span>{" "}
           <span className="text-primary">{user?.role}</span>
         </p>
-        <button
-          onClick={() => setIsUpdating(true)}
+        {
+          !isUpdateBtnClick && <button
+          onClick={() => setUpdateBtnClick(true)}
           className="mt-8 bg-red-800 px-3 py-1 text-white"
         >
           Update
         </button>
+        }
       </div>
-      <div className="mt-6">
+      {
+        isUpdateBtnClick && <div className="mt-6">
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="flex flex-col gap-4">
             <div className="flex flex-col">
@@ -129,6 +134,8 @@ const MyProfile = ({ user }) => {
           </button>
         </form>
       </div>
+      }
+      
     </div>
   );
 };
