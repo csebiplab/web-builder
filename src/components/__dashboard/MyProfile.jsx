@@ -15,14 +15,13 @@ const MyProfile = ({ user }) => {
   const onSubmit = async (data) => {
     const { newUsername, currentPassword, newPassword } = data;
 
-    // Custom condition: Ensure that the new username or new password is provided
-    if (!newUsername && !newPassword) {
-      toast.error("Please provide a new username or password.");
+    if (!newUsername && !newPassword && !currentPassword) {
+      toast.warning("Please provide a new username or password.");
       return;
     }
 
     try {
-      const response = await fetch(`/api/user`, {
+      const response = await fetch(`/api/admin`, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
@@ -37,7 +36,8 @@ const MyProfile = ({ user }) => {
 
       if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(errorData.error);
+        toast.error(errorData.error);
+        return;
       }
 
       const responseData = await response.json();
@@ -46,6 +46,7 @@ const MyProfile = ({ user }) => {
       toast.success(responseData?.message);
     } catch (error) {
       console.error("Error:", error.message);
+      toast.error("Failed to update profile");
     }
   };
 
