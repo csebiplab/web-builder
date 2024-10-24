@@ -53,9 +53,7 @@ export default function BlogList({ data }) {
                   </tr>
                 </thead>
                 <tbody>
-                  {data?.map((item) => {
-                    return (
-                      <>
+                  {data?.map((item) => (
                         <tr
                           key={item?._id}
                           className="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700"
@@ -94,9 +92,7 @@ export default function BlogList({ data }) {
                             </div>
                           </td>
                         </tr>
-                      </>
-                    );
-                  })}
+                  ))}
                 </tbody>
               </table>
             </div>
