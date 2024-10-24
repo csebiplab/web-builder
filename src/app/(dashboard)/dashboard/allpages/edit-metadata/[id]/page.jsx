@@ -2,7 +2,7 @@ import CreateAndUpdateFormForPageMeta from "@/components/__dashboard/MetaData/Cr
 import { envConfig } from "@/lib/envConfig";
 
 
-export async function getData(id) {
+async function getData(id) {
 
     const response = await fetch(`${envConfig?.url}/api/metadata/${id}`, {
         cache: "no-store",
