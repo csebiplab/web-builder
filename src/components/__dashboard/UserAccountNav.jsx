@@ -12,7 +12,7 @@ import {
 } from "./__dashboard_ui/DropDownMenu";
 
 export default function UserAccountNav({ user }) {
-  const baseAPIUrl = process.env.NEXT_PUBLIC_API_URL;
+  const baseAPIUrl = "/signin";
 
   return (
     <DropdownMenu className="!bg-primary-700  text-white">
