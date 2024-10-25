@@ -53,7 +53,10 @@ export async function GET(request: Request) {
         },
       },
       {
-        $unwind: "$userRoles",
+        $unwind: {
+          path: "$userRoles",
+          preserveNullAndEmptyArrays: true,
+        },
       },
       {
         $lookup: {
@@ -64,7 +67,10 @@ export async function GET(request: Request) {
         },
       },
       {
-        $unwind: "$roleDetails",
+        $unwind: {
+          path: "$roleDetails",
+          preserveNullAndEmptyArrays: true,
+        },
       },
       {
         $lookup: {
@@ -74,9 +80,12 @@ export async function GET(request: Request) {
           as: "rolePermissions",
         },
       },
-      {
-        $unwind: "$rolePermissions",
+     {
+      $unwind: {
+        path: "$rolePermissions",
+        preserveNullAndEmptyArrays: true,
       },
+    },
       {
         $lookup: {
           from: "permissions",
@@ -86,8 +95,11 @@ export async function GET(request: Request) {
         },
       },
       {
-        $unwind: "$permissions",
+      $unwind: {
+        path: "$permissions",
+        preserveNullAndEmptyArrays: true,
       },
+    },
       {
         $group: {
           _id: "$_id",
