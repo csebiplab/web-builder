@@ -80,12 +80,12 @@ export async function GET(request: Request) {
           as: "rolePermissions",
         },
       },
-     {
-      $unwind: {
-        path: "$rolePermissions",
-        preserveNullAndEmptyArrays: true,
+      {
+        $unwind: {
+          path: "$rolePermissions",
+          preserveNullAndEmptyArrays: true,
+        },
       },
-    },
       {
         $lookup: {
           from: "permissions",
@@ -95,11 +95,11 @@ export async function GET(request: Request) {
         },
       },
       {
-      $unwind: {
-        path: "$permissions",
-        preserveNullAndEmptyArrays: true,
+        $unwind: {
+          path: "$permissions",
+          preserveNullAndEmptyArrays: true,
+        },
       },
-    },
       {
         $group: {
           _id: "$_id",
