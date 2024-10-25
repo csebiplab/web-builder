@@ -39,8 +39,8 @@ export function ShowAllUsers({ data }) {
         </thead>
         <tbody>
           {data?.map(
-            ({ _id, name, username, email, role, permissions }, index) => (
-              <tr key={_id} className={`even:bg-blue-gray-50/50`}>
+            ({ _id, name, username, email, role, permissions, deletedAt }, index) => (
+              <tr key={_id} className={`${!deletedAt ? "even:bg-blue-gray-50/50" : "bg-danger-500"}`}>
                 <td className="p-4">
                   <Typography
                     variant="small"
@@ -86,7 +86,7 @@ export function ShowAllUsers({ data }) {
                     {role ? (
                       role
                     ) : (
-                      <span className="text-red-500">Not Assigned Yet</span>
+                      <span className="text-warning">Not Assigned Yet</span>
                     )}
                   </Typography>
                 </td>
@@ -101,7 +101,7 @@ export function ShowAllUsers({ data }) {
                         <span key={_id}>{name},</span>
                       ))
                     ) : (
-                      <span className="text-red-500">0 Permissions</span>
+                      <span className="text-warning">0 Permissions</span>
                     )}
                   </Typography>
                 </td>

@@ -187,6 +187,7 @@ export async function GET() {
         name: 1,
         username: 1,
         email: 1,
+        deletedAt: 1,
         role: 1,
         permissions: 1,
         // role: { $ifNull: ["$role", null] },
