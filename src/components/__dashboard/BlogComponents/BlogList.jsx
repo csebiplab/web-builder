@@ -81,7 +81,7 @@ export default function BlogList({ data }) {
                             <div className="flex gap-2">
                               {" "}
                               <Link
-                                href={`/dashboard/blogs/editBlog/${item?._id}`}
+                                href={`/dashboard/blogs/edit-blog/${item?._id}`}
                               >
                                 <HiPencilAlt size={24} />
                               </Link>
