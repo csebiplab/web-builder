@@ -15,7 +15,7 @@ export async function getData(id){
   }
 };
 
-export default async function page({ params }) {
+const page = async({ params }) => {
   const user = await getCurrentUser();
   const { id } = params ?? {};
   const blog = await getData(id);
@@ -41,3 +41,5 @@ export default async function page({ params }) {
     </>
   );
 }
+
+export default page;
