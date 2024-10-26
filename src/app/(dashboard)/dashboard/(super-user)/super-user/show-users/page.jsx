@@ -1,7 +1,7 @@
 import { envConfig } from "@/lib/envConfig";
 import { ShowAllUsers } from "../../../../../../components/__dashboard/SuperUser/ShowAllUsers/ShowAllUsers";
 
-export async function getData() {
+async function getData() {
   const apiUrl = envConfig.url;
 
   const res = await fetch(`${apiUrl}/api/user`, {

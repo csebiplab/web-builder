@@ -1,7 +1,7 @@
 import { envConfig } from "@/lib/envConfig";
 import { ShowAllPermissions } from "../../../../../../components/__dashboard/SuperUser/ShowAllPermissions/ShowAllPermissions";
 
-export async function getData() {
+async function getData() {
   const apiUrl = envConfig.url;
 
   const res = await fetch(`${apiUrl}/api/permission`, {

@@ -2,7 +2,7 @@ import { envConfig } from "@/lib/envConfig";
 import ShowMetadatas from "../../../../../components/__dashboard/MetaData/ShowMetadatas/ShowMetadatas";
 import getCurrentUser from "@/lib/session";
 
-export async function getData() {
+async function getData() {
   const user = await getCurrentUser();
   const apiUrl = envConfig?.url;
 
