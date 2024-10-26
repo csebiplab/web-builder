@@ -29,7 +29,8 @@ export async function GET() {
 
     const [roles, users] = await Promise.all([
       RoleModel.find({ deletedAt: null }),
-      UserModel.find({ deletedAt: null, _id: { $nin: userIds } }),
+      // UserModel.find({ deletedAt: null, _id: { $nin: userIds } }),
+      UserModel.find({ deletedAt: null }),
     ]);
 
     const rolesWithLabelValue = roles.map((role) => {
