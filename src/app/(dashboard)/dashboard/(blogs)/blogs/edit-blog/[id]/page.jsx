@@ -3,7 +3,7 @@ import  getCurrentUser  from "@/lib/session";
 import CreateBlog from "./../../../../../../../components/__dashboard/BlogComponents/CreateBlog/CreateBlog";
 import { envConfig } from "@/lib/envConfig";
 
-const getData = async (id) => {
+export const getData = async (id) => {
   try {
     const res = await fetch(`${envConfig.url}/api/blogs/${id}`, {
       cache: "no-store",

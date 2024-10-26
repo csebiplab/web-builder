@@ -2,7 +2,7 @@ import  getCurrentUser  from "@/lib/session";
 import { envConfig } from "./../../../../../../lib/envConfig";
 import BlogList from "@/components/__dashboard/BlogComponents/BlogList";
 
-async function getData(user) {
+export async function getData(user) {
 
   const res = await fetch(`${envConfig.url}/api/blogs?projectFor=${user?.role}`, {
     cache: "no-store",

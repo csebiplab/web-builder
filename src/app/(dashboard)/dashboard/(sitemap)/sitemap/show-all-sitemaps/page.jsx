@@ -2,7 +2,7 @@ import { envConfig } from "./../../../../../../lib/envConfig";
 import ShowSitemaps from "../../../../../../components/__dashboard/SitemapComponents/ShowSitemaps";
 import getCurrentUser from "@/lib/session";
 
-async function getData(user) {
+export async function getData(user) {
   const apiUrl = envConfig.url;
 
   const res = await fetch(`${apiUrl}/api/sitemap?projectFor=${user?.role}`, {
