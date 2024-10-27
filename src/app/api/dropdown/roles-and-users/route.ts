@@ -31,7 +31,7 @@ export async function GET() {
 
     const users = await UserModel.find({
       deletedAt: null,
-      _id: { $nin: userIds },
+      // _id: { $nin: userIds },
     });
 
     // const [roles, users] = await Promise.all([
