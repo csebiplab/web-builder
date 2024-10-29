@@ -4,7 +4,7 @@ import { envConfig } from "@/lib/envConfig";
 async function getData() {
   const apiUrl = envConfig.url;
   const res = await fetch(`${apiUrl}/api/dropdown/roles-and-users`, {
-    cache: "no-store",
+    next: { revalidate: 0 },
   });
   const data = await res.json();
   return data?.data;

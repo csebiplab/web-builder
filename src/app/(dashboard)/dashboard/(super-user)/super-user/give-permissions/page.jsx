@@ -4,7 +4,7 @@ import GivePermissions from "../../../../../../components/__dashboard/SuperUser/
 async function getData() {
   const apiUrl = envConfig.url;
   const res = await fetch(`${apiUrl}/api/dropdown/role-nd-permissions`, {
-    cache: "no-store",
+    next: { revalidate: 0 },
   });
   const data = await res.json();
   return data?.data;
