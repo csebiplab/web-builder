@@ -5,19 +5,19 @@ import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import { useFetchdata } from "./../../../../hooks/useFetchdata";
 
-const GivePermissions = ({ fetchUrl, url }) => {
+const GivePermissions = ({ fetchUrl, url, roles, permissions }) => {
   const { register, handleSubmit, reset } = useForm();
   const [selectedRole, setSelectedRole] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [message, setMessage] = useState("");
-  const { data, isLoading, error } = useFetchdata(fetchUrl);
+  // const { data, isLoading, error } = useFetchdata(fetchUrl);
 
-  if(isLoading) return <p>Loading...</p>
+  // if(isLoading) return <p>Loading...</p>
 
 
 
-  const roles = data?.data?.roles;
-  const permissions = data?.data?.permissions;
+  // const roles = data?.data?.roles;
+  // const permissions = data?.data?.permissions;
 
   const handleRoleChange = (event) => {
     setSelectedRole(event.target.value);

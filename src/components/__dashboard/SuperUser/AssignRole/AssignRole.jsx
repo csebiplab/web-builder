@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import { useFetchdata } from "./../../../../hooks/useFetchdata";
 
-const AssignRole = ({  url, fetchUrl }) => {
+const AssignRole = ({ roles, users, url, fetchUrl }) => {
   const {
     register,
     handleSubmit,
@@ -14,12 +14,12 @@ const AssignRole = ({  url, fetchUrl }) => {
   } = useForm();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [message, setMessage] = useState("");
-   const { data, isLoading, error } = useFetchdata(fetchUrl);
+  //  const { data, isLoading, error } = useFetchdata(fetchUrl);
 
-  if(isLoading) return <p>Loading...</p>
+  // if(isLoading) return <p>Loading...</p>
 
-  const users = data?.data?.users
-  const roles = data?.data?.roles;
+  // const users = data?.data?.users
+  // const roles = data?.data?.roles;
 
   const onSubmit = async (data) => {
     const { userId, roleId } = data;
