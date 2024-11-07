@@ -5,9 +5,12 @@ import { envConfig } from "@/lib/envConfig";
 async function getData(user) {
   const apiUrl = envConfig.url;
 
-  const res = await fetch(`${apiUrl}/api/site-verification?${user?.role}`, {
-    cache: "no-store",
-  });
+  const res = await fetch(
+    `${apiUrl}/api/site-verification?projectFor=${user?.role}`,
+    {
+      cache: "no-store",
+    }
+  );
   const data = await res.json();
   return data?.data;
 }
