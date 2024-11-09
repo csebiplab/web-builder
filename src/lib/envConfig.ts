@@ -7,4 +7,7 @@ export const envConfig = {
 
   mongodbUri: process.env.MONGODB_URI as string,
   saltRounds: process.env.SALT_ROUNDS as unknown as number,
+
+  emailUser: process.env.EMAIL_USER as string,
+  emailPass: process.env.EMAIL_PASS as string,
 };
