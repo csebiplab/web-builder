@@ -67,7 +67,8 @@ export async function POST(req: Request) {
       from: process.env.EMAIL_USER,
       to: projectFor,
       subject: `New message from ${name}`,
-      text: `Name: ${name}\nEmail: ${email}\nMessage: ${message}`,
+      // text: `Name: ${name}\nEmail: ${email}`, // Optional plain text fallback
+      html: message,
     });
 
     return jsonResponse(
