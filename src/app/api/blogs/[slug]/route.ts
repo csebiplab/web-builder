@@ -8,7 +8,7 @@ import { responseMessageUtilities } from "@/lib/response.message.utility";
 
 /**
  * @swagger
- * /api/blog/{slug}:
+ * /api/blogs/{slug}:
  *   patch:
  *     tags: [Blog]
  *     description: Update blog information.
@@ -94,7 +94,7 @@ export async function PATCH(
 
 /**
  * @swagger
- * /api/blog/{slug}:
+ * /api/blogs/{slug}:
  *   get:
  *     tags: [Blog]
  *     description: Fetch a single blog by ID or custom link.
