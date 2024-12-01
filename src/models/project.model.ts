@@ -58,7 +58,6 @@ const projectSchema: Schema<IProject> = new Schema(
   {
     projectFor: {
       type: String,
-      unique: true,
       required: true,
     },
     projectType: {
