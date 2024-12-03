@@ -15,7 +15,7 @@ import { responseMessageUtilities } from "@/lib/response.message.utility";
  * @swagger
  * /api/projects/{id}:
  *   patch:
- *     tags: [Project Details]
+ *     tags: [Projects]
  *     summary: Update project details
  *     description: Update a project's details using the project ID.
  *     parameters:
@@ -100,7 +100,7 @@ export async function PATCH(
  * @swagger
  * /api/projects/{id}:
  *   get:
- *     tags: [Project Details]
+ *     tags: [Projects]
  *     summary: Get project details by name
  *     description: Retrieve project details by providing the project name.
  *     parameters:
