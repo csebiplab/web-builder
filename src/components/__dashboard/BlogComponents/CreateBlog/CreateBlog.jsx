@@ -1,11 +1,17 @@
 "use client";
+
 import React, { useEffect, useState, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 import BlogContentEditor from "./BlogContentEditor";
+import YearNdMonthPicker from "../../../common/YearNdMonthPicker";
 
 function CreateBlog({ id, data, user }) {
   const router = useRouter();
+  const currentYear = new Date().getFullYear();
+  const [selectedYear, setSelectedYear] = useState("");
+  const [selectedMonth, setSelectedMonth] = useState("");
+
   const [inputValue, setInputValue] = useState({
     blogTitle: "",
     metaTitle: "",
@@ -38,6 +44,15 @@ function CreateBlog({ id, data, user }) {
       [eventKey]: value,
     }));
   }, []);
+
+  const handleChangeYear = useCallback((selectedYear) => {
+    setSelectedYear(selectedYear);
+    inputValue["blogTitle"] = inputValue.blogTitle.concat(` ${selectedYear}`);
+  });
+  const handleChangeMonth = useCallback((selectedMonth) => {
+    setSelectedMonth(selectedMonth);
+    inputValue["blogTitle"] = inputValue.blogTitle.concat(`${selectedMonth}`);
+  });
 
   const handleBlogContentEditor = useCallback((eventKey, content) => {
     setInputValue((prevInputValue) => ({
@@ -80,6 +95,9 @@ function CreateBlog({ id, data, user }) {
     }
   };
 
+  // console.log(selectedMonth, "selectedMonth");
+  // console.log(selectedYear, "selectedYear");
+
   return (
     <div className="px-5">
       <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-14">
@@ -91,24 +109,47 @@ function CreateBlog({ id, data, user }) {
           { label: "Meta Keywords", key: "metaKeywords" },
           { label: "Short Description", key: "shortDescription" },
         ].map((field) => (
-          <div className="sm:col-span-3" key={field.key}>
-            <label
-              htmlFor={field.key}
-              className="block text-sm font-medium leading-6 text-gray-900 dark:text-white"
-            >
-              {field.label}
-            </label>
-            <div className="mt-2">
-              <textarea
-                required
-                name={field.key}
-                id={field.key}
-                autoComplete="off"
-                rows="4"
-                className="block lg:w-4/6 w-full px-5 rounded-md border-0 py-1.5 text-gray-900 dark:text-white shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                value={inputValue[field.key]}
-                onChange={(e) => handleInputChange(field.key, e)}
-              />
+          <div
+            className={`${field.key === "blogTitle" ? "flex w-4/6" : ""}`}
+            key={field.key}
+          >
+            <div className="w-full">
+              <label
+                htmlFor={field.key}
+                className="block text-sm font-medium leading-6 text-gray-900 dark:text-white"
+              >
+                {field.label}
+              </label>
+              <div className="mt-2">
+                <textarea
+                  required
+                  name={field.key}
+                  id={field.key}
+                  autoComplete="off"
+                  rows="4"
+                  className={`block ${
+                    field.key !== "blogTitle" && "lg:w-4/6"
+                  } w-full px-5 rounded-md border-0 py-1.5
+                   text-gray-900 dark:text-white shadow-sm ring-1 ring-inset
+                    ring-gray-300 placeholder:text-gray-400 focus:ring-2 
+                    focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6`}
+                  value={inputValue[field.key]}
+                  onChange={(e) => handleInputChange(field.key, e)}
+                />
+              </div>
+            </div>
+            <div className="ml-2">
+              {field?.key === "blogTitle" && (
+                <YearNdMonthPicker
+                  currentYear={currentYear}
+                  setSelectedYear={setSelectedYear}
+                  setSelectedMonth={setSelectedMonth}
+                  selectedMonth={selectedMonth}
+                  selectedYear={selectedYear}
+                  handleChangeMonth={handleChangeMonth}
+                  handleChangeYear={handleChangeYear}
+                />
+              )}
             </div>
           </div>
         ))}
@@ -126,7 +167,7 @@ function CreateBlog({ id, data, user }) {
           type="submit"
           aria-label={id ? "Update" : "Create"}
           onClick={handleSubmit}
-          className={`bg-transparent w-1/6 hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 my-5 px-5 border border-blue-500 hover:border-transparent rounded ${
+          className={`w-1/6 bg-blue-600 hover:bg-blue-500  font-semibold text-white py-2 my-5 px-5 border border-blue-500 hover:border-transparent rounded ${
             loading ? "cursor-not-allowed" : ""
           }`}
           disabled={loading}
