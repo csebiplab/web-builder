@@ -1,0 +1,7 @@
+.hover__min_flexbox:hover .childs {
+    background: #838080;
+}
+
+.hover__layoutStyle:hover {
+    border: 1px solid palevioletred;
+}
