@@ -2,7 +2,7 @@
 
 import React from "react";
 
-export default function LayoutModal({ isOpen, onClose, onSelectLayout }) {
+export default function LayoutModal({ isOpen, handleSelectLayout }) {
   if (!isOpen) return null;
 
   return (
@@ -14,7 +14,7 @@ export default function LayoutModal({ isOpen, onClose, onSelectLayout }) {
         <div className="flex justify-around gap-x-8 mb-4">
           <div>
             <div
-              onClick={() => onSelectLayout("Flexbox")}
+              onClick={() => handleSelectLayout("Flexbox")}
               className="cursor-pointer w-40 h-40 flex gap-x-1 hover__min_flexbox"
             >
               <div className="bg-gray-200 childs w-1/2 h-full"></div>
@@ -27,7 +27,7 @@ export default function LayoutModal({ isOpen, onClose, onSelectLayout }) {
           </div>
           <div>
             <div
-              onClick={() => onSelectLayout("Grid")}
+              onClick={() => handleSelectLayout("Grid")}
               className="border border-dashed border-gray-300 cursor-pointer w-40 h-40 grid grid-cols-2 gap-[1px] hover__min_flexbox"
             >
               <div className="border border-dashed border-gray-300 h-full w-full childs"></div>
@@ -39,7 +39,7 @@ export default function LayoutModal({ isOpen, onClose, onSelectLayout }) {
           </div>
         </div>
         <button
-          onClick={onClose}
+          onClick={() => setIsLayoutModalOpen(false)}
           className="mt-4 px-4 py-2 bg-red-500 text-white rounded w-full"
         >
           Close
