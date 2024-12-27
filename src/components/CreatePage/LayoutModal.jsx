@@ -2,7 +2,11 @@
 
 import React from "react";
 
-export default function LayoutModal({ isOpen, handleSelectLayout }) {
+export default function LayoutModal({
+  isOpen,
+  handleSelectLayout,
+  setIsLayoutModalOpen,
+}) {
   if (!isOpen) return null;
 
   return (
