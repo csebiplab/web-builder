@@ -8,16 +8,21 @@ export async function POST(req: NextRequest) {
   await connectToDatabase();
 
   try {
-    const { title, slug, sections } = await req.json();
+    const { title, slug, designData } = await req.json();
 
-    if (!title || !slug || !Array.isArray(sections)) {
+    if (!title || !slug || !Array.isArray(designData)) {
       return NextResponse.json(
         { error: "Invalid input data" },
         { status: 400 }
       );
     }
 
-    const page = new PageModel({ title, slug, sections });
+    const page = new PageModel({
+      title,
+      slug,
+      designData,
+    });
+
     await page.save();
 
     return jsonResponse(
