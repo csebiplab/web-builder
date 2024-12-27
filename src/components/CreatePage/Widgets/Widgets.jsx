@@ -2,14 +2,12 @@
 
 import { useState } from "react";
 import { Rnd } from "react-rnd";
-import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
-import { FaHeading, FaImage, FaTextHeight, FaVideo } from "react-icons/fa";
-import { MdSmartButton } from "react-icons/md";
+import { FaHeading } from "react-icons/fa";
 import LayoutModal from "./../LayoutModal";
 import LayoutStylePreview from "./../LayoutStylePreview";
 import LayoutOptions from "./../LayoutOptions";
-import Link from "next/link";
+import { useRef } from "react";
 
 export default function Widgets({
   handleAddSection,
@@ -20,39 +18,48 @@ export default function Widgets({
   layoutStyle,
   setIsLayoutModalOpen,
 }) {
+  const textareaRef = useRef(null);
   const [elements, setElements] = useState([]);
 
   const widgets = [
-    { type: "heading", label: "Heading", icon: <FaHeading /> },
-    { type: "textEditor", label: "Text Editor", icon: <FaTextHeight /> },
-    { type: "image", label: "Image", icon: <FaImage /> },
-    { type: "button", label: "Button", icon: <MdSmartButton /> },
-    { type: "video", label: "Video", icon: <FaVideo /> },
-    { type: "container", label: "Container", icon: "" },
+    {
+      type: "heading",
+      label: "Heading",
+      icon: <FaHeading />,
+    },
   ];
 
-  const handleAddElement = (type, position) => {
+  const handleAddElement = (type) => {
     const newElement = {
       id: elements.length + 1,
       type,
-      x: position?.x || 100,
-      y: position?.y || 100,
-      width: 200,
-      height: type === "textEditor" ? 150 : 100,
-      content: type === "textEditor" ? "" : type === "heading" ? "Heading" : "",
+      width: "100%",
+      height: "auto",
+      content: type === "heading" ? "Add Your Heading Text Here" : "",
     };
     setElements([...elements, newElement]);
   };
 
-  // console.log(elements, "elm");
+  console.log(elements, "elm");
 
   const handleSave = async () => {
-    await fetch("/api/layout", {
+    await fetch("/api/pages", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ name: "Homepage", elements }),
+      body: JSON.stringify({ title: "", slug: "", elements }),
     });
     alert("Layout saved!");
+  };
+
+  const handleInputChange = (e, el) => {
+    setElements((prev) =>
+      prev.map((element) =>
+        element.id === el.id ? { ...element, content: e.target.value } : element
+      )
+    );
+    const textarea = textareaRef.current;
+    textarea.style.height = "auto"; // Reset height
+    textarea.style.height = `${textarea.scrollHeight}px`; // Set new height
   };
 
   return (
@@ -80,21 +87,13 @@ export default function Widgets({
       <div className="flex-1 relative bg-gray-50 w-full">
         {/* Editor Area */}
         <div
-          className="w-full"
+          className="w-[90%] h-auto min-h-[50%] border border-red-500 mx-10 relative"
           onDragOver={(e) => e.preventDefault()}
           onDrop={(e) => {
             const widgetType = e.dataTransfer.getData("widgetType");
-            const rect = e.currentTarget.getBoundingClientRect();
-            const position = {
-              x: e.clientX - rect.left,
-              y: e.clientY - rect.top,
-            };
-            handleAddElement(widgetType, position);
+            handleAddElement(widgetType);
           }}
         >
-          <div className="my-16">
-            <Link href="/preview-pages">See Page Preview</Link>
-          </div>
           {/* Flexbox Layout Style Container */}
           <LayoutStylePreview layoutStyle={layoutStyle} />
 
@@ -102,18 +101,25 @@ export default function Widgets({
             <Rnd
               key={el.id}
               bounds="parent"
+              enableResizing={{
+                top: false,
+                right: true,
+                bottom: false,
+                left: true,
+                topRight: false,
+                bottomRight: false,
+                bottomLeft: false,
+                topLeft: false,
+              }}
               size={{ width: el.width, height: el.height }}
-              position={{ x: el.x, y: el.y }}
               onDragStop={(e, d) =>
                 setElements((prev) =>
                   prev.map((element) =>
-                    element.id === el.id
-                      ? { ...element, x: d.x, y: d.y }
-                      : element
+                    element.id === el.id ? { ...element } : element
                   )
                 )
               }
-              onResizeStop={(e, direction, ref, delta, position) => {
+              onResizeStop={(e, direction, ref, delta) => {
                 setElements((prev) =>
                   prev.map((element) =>
                     element.id === el.id
@@ -121,108 +127,42 @@ export default function Widgets({
                           ...element,
                           width: parseInt(ref.style.width),
                           height: parseInt(ref.style.height),
-                          ...position,
                         }
                       : element
                   )
                 );
               }}
-              className="border border-dashed"
+              className="p-2 border border-transparent hover:border hover:border-pink-300 w-full"
             >
               {el.type === "heading" && (
-                <div className="p-2 bg-gray-100 text-center font-bold">
-                  <input
-                    type="text"
+                <div className="text-center border-2 border-pink-400">
+                  <textarea
+                    ref={textareaRef}
                     value={el.content}
-                    onChange={(e) =>
-                      setElements((prev) =>
-                        prev.map((element) =>
-                          element.id === el.id
-                            ? { ...element, content: e.target.value }
-                            : element
-                        )
-                      )
-                    }
-                    className="bg-transparent border-none text-center outline-none w-full"
+                    onChange={(e) => handleInputChange(e, el)}
+                    className="bg-transparent border-none text-center outline-none w-full h-auto
+             text-4xl font-bold resize-none break-words overflow-hidden"
+                    style={{
+                      whiteSpace: "pre-wrap",
+                      wordBreak: "break-word",
+                      overflowWrap: "break-word",
+                    }}
+                    rows={1}
                   />
                 </div>
-              )}
-              {el.type === "container" && (
-                <div className="p-2 bg-gray-100 text-center font-bold">
-                  <input
-                    type="text"
-                    value={el.content}
-                    onChange={(e) =>
-                      setElements((prev) =>
-                        prev.map((element) =>
-                          element.id === el.id
-                            ? { ...element, content: e.target.value }
-                            : element
-                        )
-                      )
-                    }
-                    className="bg-transparent border-none text-center outline-none w-full"
-                  />
-                </div>
-              )}
-              {el.type === "textEditor" && (
-                <ReactQuill
-                  value={el.content}
-                  onChange={(value) =>
-                    setElements((prev) =>
-                      prev.map((element) =>
-                        element.id === el.id
-                          ? { ...element, content: value }
-                          : element
-                      )
-                    )
-                  }
-                  style={{ height: "100%", width: "100%" }}
-                />
-              )}
-              {el.type === "image" && (
-                <div className="w-full h-full flex justify-center items-center">
-                  <label className="cursor-pointer">
-                    <input
-                      type="file"
-                      accept="image/*"
-                      className="hidden"
-                      onChange={(e) => {
-                        const file = e.target.files[0];
-                        if (file) {
-                          const reader = new FileReader();
-                          reader.onload = (event) => {
-                            setElements((prev) =>
-                              prev.map((element) =>
-                                element.id === el.id
-                                  ? { ...element, content: event.target.result }
-                                  : element
-                              )
-                            );
-                          };
-                          reader.readAsDataURL(file);
-                        }
-                      }}
-                    />
-                    {el.content ? (
-                      <img
-                        src={el.content}
-                        alt="Uploaded"
-                        className="w-full h-full object-cover"
-                      />
-                    ) : (
-                      <div className="text-gray-500">Upload Image</div>
-                    )}
-                  </label>
-                </div>
-              )}
-              {el.type === "button" && (
-                <button className="w-full h-full bg-blue-500 text-white font-bold rounded">
-                  Button
-                </button>
               )}
             </Rnd>
           ))}
+        </div>
+        <div className="ml-10">
+          {elements?.length > 0 && (
+            <button
+              onClick={handleSave}
+              className="w-32 h-full py-2 px-1 bg-blue-500 text-white font-bold rounded"
+            >
+              Save Layout
+            </button>
+          )}
         </div>
 
         <div className="p-8">
@@ -235,17 +175,8 @@ export default function Widgets({
             />
           )}
 
-          {elements?.length > 0 && (
-            <button
-              onClick={handleSave}
-              className="w-32 h-full bg-blue-500 text-white font-bold rounded"
-            >
-              Save Layout
-            </button>
-          )}
-
           {/* Primary Widgets */}
-          <div className="flex justify-center items-center mt-32">
+          <div className="flex justify-center items-center">
             {!selectedLayout && (
               <div className="w-full border border-dashed border-gray-500 h-32 flex justify-center items-center">
                 <button
