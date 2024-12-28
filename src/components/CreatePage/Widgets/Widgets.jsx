@@ -31,12 +31,14 @@ export default function Widgets({
     },
   ];
 
-  const handleAddElement = (type) => {
+  const handleAddElement = (type, position) => {
     const newElement = {
       id: elements.length + 1,
       type,
       width: "100%",
       height: "auto",
+      x: position?.x || 0,
+      y: position?.y || 0,
       content: type === "heading" ? "Add Your Heading Text Here" : "",
       htmlTag: type === "heading" ? "h1" : "div",
       style: {
@@ -95,6 +97,8 @@ export default function Widgets({
     textarea.style.height = `${textarea.scrollHeight}px`;
   };
 
+  // console.log(elements, "elm");
+
   return (
     <div className="flex h-screen w-full">
       <>
@@ -115,6 +119,12 @@ export default function Widgets({
 
           {elements.map((el) => (
             <Rnd
+              id={`element-${el.id}`}
+              // style={{
+              //   position: "absolute",
+              //   top: el.y,
+              //   left: el.x,
+              // }}
               key={el.id}
               bounds="parent"
               enableResizing={{
@@ -128,13 +138,33 @@ export default function Widgets({
                 topLeft: false,
               }}
               size={{ width: el.width, height: el.height }}
-              onDragStop={(e, d) =>
+              position={{
+                x: el.x || 0,
+                y: el.y || 0,
+              }}
+              onDragStop={(e, d) => {
+                const newY = d.y;
+
                 setElements((prev) =>
                   prev.map((element) =>
-                    element.id === el.id ? { ...element } : element
+                    element.id === el.id
+                      ? { ...element, x: d.x, y: newY }
+                      : element
                   )
-                )
-              }
+                );
+
+                // setElements((prev) =>
+                //   prev.map((element) => {
+                //     if (
+                //       element.id !== el.id &&
+                //       Math.abs(element.y - newY) < 20
+                //     ) {
+                //       return { ...element, y: newY + 200 };
+                //     }
+                //     return element;
+                //   })
+                // );
+              }}
               onResizeStop={(e, direction, ref, delta) => {
                 setElements((prev) =>
                   prev.map((element) =>
@@ -190,15 +220,30 @@ export default function Widgets({
               setIsLayoutModalOpen={setIsLayoutModalOpen}
             />
           )}
-
           {/* Primary Widgets */}
           <div className="flex justify-center items-center">
             {!selectedLayout && (
               <div
-                onDragOver={(e) => e.preventDefault()}
+                onDragOver={(e) => e.preventDefault()} // Prevent default drag behavior
                 onDrop={(e) => {
-                  const widgetType = e.dataTransfer.getData("widgetType");
-                  handleAddElement(widgetType);
+                  const widgetType = e.dataTransfer.getData("widgetType"); // Get dragged widget type
+                  const position = {
+                    x: 0, // Fixed to 0 for horizontal alignment
+                    y: 0, // Initialize y to 0
+                  };
+
+                  if (elements?.length > 0) {
+                    // Calculate the next available y position dynamically
+                    const lastElement = elements[elements.length - 1]; // Get the last element
+                    const lastElementRef = document.getElementById(
+                      `element-${lastElement.id}`
+                    ); // Get its DOM node
+                    const lastElementHeight =
+                      lastElementRef?.offsetHeight || 50; // Get its rendered height or default to 50px
+                    position.y = (lastElement.y || 0) + lastElementHeight + 10; // Add spacing of 10px
+                  }
+
+                  handleAddElement(widgetType, position); // Pass widget type and calculated position
                 }}
                 className="w-full border border-dashed border-gray-500 h-32 flex justify-center items-center"
               >
@@ -211,7 +256,6 @@ export default function Widgets({
               </div>
             )}
           </div>
-
           {/* Layout Options For Flexbox */}
           {selectedLayout === "Flexbox" && (
             <LayoutOptions
