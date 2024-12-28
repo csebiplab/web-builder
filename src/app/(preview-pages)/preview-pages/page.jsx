@@ -116,11 +116,11 @@ export default async function page() {
   }
 
   return (
-    <div>
+    <main className="container">
       {data.map((page) => (
         <div key={page._id}>
           {page.designData.map((design) => (
-            <div key={design.id} style={design.style}>
+            <section key={design.id} style={design.style}>
               {design.sections.map((section) => {
                 const SectionTag = section.htmlTag || "div";
                 return (
@@ -133,10 +133,10 @@ export default async function page() {
                   </SectionTag>
                 );
               })}
-            </div>
+            </section>
           ))}
         </div>
       ))}
-    </div>
+    </main>
   );
 }

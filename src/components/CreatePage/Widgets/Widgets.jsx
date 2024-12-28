@@ -9,6 +9,7 @@ import LayoutStylePreview from "./../LayoutStylePreview";
 import LayoutOptions from "./../LayoutOptions";
 import { useRef } from "react";
 import { toast } from "react-toastify";
+import WidgetsSidebar from "./Sidebar";
 
 export default function Widgets({
   handleAddSection,
@@ -90,41 +91,24 @@ export default function Widgets({
       )
     );
     const textarea = textareaRef.current;
-    textarea.style.height = "auto"; // Reset height
-    textarea.style.height = `${textarea.scrollHeight}px`; // Set new height
+    textarea.style.height = "auto";
+    textarea.style.height = `${textarea.scrollHeight}px`;
   };
 
   return (
     <div className="flex h-screen w-full">
-      {/* Sidebar */}
-      <div className="w-2/12 bg-gray-100 p-4 border-r overflow-y-auto">
-        <h2 className="text-lg font-bold mb-4">Widgets</h2>
-        <div className="flex flex-col gap-4">
-          {widgets.map((widget) => (
-            <div
-              key={widget.type}
-              draggable
-              onDragStart={(e) =>
-                e.dataTransfer.setData("widgetType", widget.type)
-              }
-              className="flex items-center gap-2 p-2 bg-white shadow hover:shadow-lg cursor-pointer border rounded"
-            >
-              {widget.icon}
-              <span>{widget.label}</span>
-            </div>
-          ))}
-        </div>
-      </div>
-
+      <>
+        <WidgetsSidebar widgets={widgets} />
+      </>
       <div className="flex-1 relative bg-gray-50 w-full">
         {/* Editor Area */}
         <div
           className="w-[90%] h-auto min-h-[50%] border border-red-500 mx-10 relative"
-          onDragOver={(e) => e.preventDefault()}
-          onDrop={(e) => {
-            const widgetType = e.dataTransfer.getData("widgetType");
-            handleAddElement(widgetType);
-          }}
+          // onDragOver={(e) => e.preventDefault()}
+          // onDrop={(e) => {
+          //   const widgetType = e.dataTransfer.getData("widgetType");
+          //   handleAddElement(widgetType);
+          // }}
         >
           {/* Flexbox Layout Style Container */}
           <LayoutStylePreview layoutStyle={layoutStyle} />
@@ -210,7 +194,14 @@ export default function Widgets({
           {/* Primary Widgets */}
           <div className="flex justify-center items-center">
             {!selectedLayout && (
-              <div className="w-full border border-dashed border-gray-500 h-32 flex justify-center items-center">
+              <div
+                onDragOver={(e) => e.preventDefault()}
+                onDrop={(e) => {
+                  const widgetType = e.dataTransfer.getData("widgetType");
+                  handleAddElement(widgetType);
+                }}
+                className="w-full border border-dashed border-gray-500 h-32 flex justify-center items-center"
+              >
                 <button
                   onClick={handleAddSection}
                   className="mb-4 px-4 py-2 bg-blue-500 text-white rounded-full"
