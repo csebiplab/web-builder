@@ -8,6 +8,7 @@ import LayoutModal from "./../LayoutModal";
 import LayoutStylePreview from "./../LayoutStylePreview";
 import LayoutOptions from "./../LayoutOptions";
 import { useRef } from "react";
+import { toast } from "react-toastify";
 
 export default function Widgets({
   handleAddSection,
@@ -36,19 +37,50 @@ export default function Widgets({
       width: "100%",
       height: "auto",
       content: type === "heading" ? "Add Your Heading Text Here" : "",
+      htmlTag: type === "heading" ? "h1" : "div",
+      style: {
+        classname: "text-4xl font-bold text-center",
+        custom: { fontSize: "36px" },
+      },
     };
     setElements([...elements, newElement]);
   };
 
-  console.log(elements, "elm");
+  const preparePayload = (elm) => ({
+    title: "My Awesome Page",
+    slug: "my-awesome-page",
+    designData: elm.map((el, i) => ({
+      id: el.id.toString(),
+      style: { width: el.width, height: el.height },
+      sections: [
+        {
+          id: i + 1,
+          type: el.type,
+          content: el.content,
+          htmlTag: el.htmlTag,
+          style: el.style,
+        },
+      ],
+    })),
+  });
 
   const handleSave = async () => {
-    await fetch("/api/pages", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ title: "", slug: "", elements }),
-    });
-    alert("Layout saved!");
+    const payload = preparePayload(elements);
+    // console.log(payload, "payload");
+    try {
+      const response = await fetch("/api/pages", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+      if (response.ok) {
+        toast.success("Layout saved successfully!");
+      } else {
+        toast.error("Failed to save layout.");
+      }
+    } catch (error) {
+      console.error("Error saving layout:", error);
+    }
   };
 
   const handleInputChange = (e, el) => {

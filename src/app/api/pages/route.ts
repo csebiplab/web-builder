@@ -38,3 +38,20 @@ export async function POST(req: NextRequest) {
     );
   }
 }
+
+export async function GET(req: NextRequest) {
+  await connectToDatabase();
+
+  try {
+    const page = await PageModel.find({});
+
+    return jsonResponse(
+      page,
+      responseMessageUtilities.message,
+      responseMessageUtilities.success
+    );
+  } catch (err) {
+    console.error(err);
+    return NextResponse.json({ error: "Request Failed" }, { status: 500 });
+  }
+}
