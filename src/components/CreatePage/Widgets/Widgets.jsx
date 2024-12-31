@@ -53,7 +53,7 @@ export default function Widgets({
     designData: elm.map((el, i) => ({
       id: el.id.toString(),
       style: { width: el.width, height: el.height },
-      sections: [
+      components: [
         {
           id: i + 1,
           type: el.type,
@@ -97,14 +97,18 @@ export default function Widgets({
 
   // console.log(elements, "elm");
 
+  const removeElementHandler = (elmId) => {
+    setElements((prev) => prev.filter((element) => element.id !== elmId));
+  };
+
   return (
     <>
       <div className="flex min-h-screen w-full">
         <>
           <WidgetsSidebar widgets={widgets} />
         </>
-        <div className="bg-gray-50 w-full border border-green-700">
-          <div className="w-10/12 border border-yellow-700 mx-auto relative">
+        <div className="bg-gray-50 w-full">
+          <div className="w-10/12 mx-auto mt-6">
             {/* Render DnD Elements */}
             {elements.map((el) => (
               <Rnd
@@ -142,9 +146,17 @@ export default function Widgets({
                     )
                   );
                 }}
-                style={{ position: "static", top: "auto", left: "auto" }}
-                className="p-2 border border-transparent hover:border hover:border-pink-300 w-full"
+                style={{ position: "relative", top: "auto", left: "auto" }}
+                className="p-2 border border-transparent 
+                hover:border hover:border-pink-300 w-full show__after_parent"
               >
+                <div
+                  onClick={() => removeElementHandler(el.id)}
+                  className="hidden show__after_child cursor-pointer absolute -top-5 left-1/2 w-8
+                 bg-yellow-500 text-center text-red-600"
+                >
+                  X
+                </div>
                 {el.type === "heading" && (
                   <div className="text-center border-2 border-pink-400">
                     <textarea
@@ -165,7 +177,7 @@ export default function Widgets({
               </Rnd>
             ))}
 
-            <div className="p-8 border border-blue-500 w-full flex justify-center items-center mt-10">
+            <div className="p-8 w-full flex justify-center items-center mt-10">
               <div className="w-full">
                 <div className="ml-10 mb-5">
                   {elements?.length > 0 && (

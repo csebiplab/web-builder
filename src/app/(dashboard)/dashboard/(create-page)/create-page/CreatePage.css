@@ -5,3 +5,7 @@
 .hover__layoutStyle:hover {
     border: 1px solid palevioletred;
 }
+
+.show__after_parent:hover .show__after_child {
+    display: block;
+}
