@@ -31,14 +31,12 @@ export default function Widgets({
     },
   ];
 
-  const handleAddElement = (type, position) => {
+  const handleAddElement = (type) => {
     const newElement = {
       id: elements.length + 1,
       type,
       width: "100%",
       height: "auto",
-      x: position?.x || 0,
-      y: position?.y || 0,
       content: type === "heading" ? "Add Your Heading Text Here" : "",
       htmlTag: type === "heading" ? "h1" : "div",
       style: {
@@ -100,171 +98,125 @@ export default function Widgets({
   // console.log(elements, "elm");
 
   return (
-    <div className="flex h-screen w-full">
-      <>
-        <WidgetsSidebar widgets={widgets} />
-      </>
-      <div className="flex-1 relative bg-gray-50 w-full">
-        {/* Editor Area */}
-        <div
-          className="w-[90%] h-auto min-h-[50%] border border-red-500 mx-10 relative"
-          // onDragOver={(e) => e.preventDefault()}
-          // onDrop={(e) => {
-          //   const widgetType = e.dataTransfer.getData("widgetType");
-          //   handleAddElement(widgetType);
-          // }}
-        >
-          {/* Flexbox Layout Style Container */}
-          <LayoutStylePreview layoutStyle={layoutStyle} />
-
-          {elements.map((el) => (
-            <Rnd
-              id={`element-${el.id}`}
-              // style={{
-              //   position: "absolute",
-              //   top: el.y,
-              //   left: el.x,
-              // }}
-              key={el.id}
-              bounds="parent"
-              enableResizing={{
-                top: false,
-                right: true,
-                bottom: false,
-                left: true,
-                topRight: false,
-                bottomRight: false,
-                bottomLeft: false,
-                topLeft: false,
-              }}
-              size={{ width: el.width, height: el.height }}
-              position={{
-                x: el.x || 0,
-                y: el.y || 0,
-              }}
-              onDragStop={(e, d) => {
-                const newY = d.y;
-
-                setElements((prev) =>
-                  prev.map((element) =>
-                    element.id === el.id
-                      ? { ...element, x: d.x, y: newY }
-                      : element
-                  )
-                );
-
-                // setElements((prev) =>
-                //   prev.map((element) => {
-                //     if (
-                //       element.id !== el.id &&
-                //       Math.abs(element.y - newY) < 20
-                //     ) {
-                //       return { ...element, y: newY + 200 };
-                //     }
-                //     return element;
-                //   })
-                // );
-              }}
-              onResizeStop={(e, direction, ref, delta) => {
-                setElements((prev) =>
-                  prev.map((element) =>
-                    element.id === el.id
-                      ? {
-                          ...element,
-                          width: parseInt(ref.style.width),
-                          height: parseInt(ref.style.height),
-                        }
-                      : element
-                  )
-                );
-              }}
-              className="p-2 border border-transparent hover:border hover:border-pink-300 w-full"
-            >
-              {el.type === "heading" && (
-                <div className="text-center border-2 border-pink-400">
-                  <textarea
-                    ref={textareaRef}
-                    value={el.content}
-                    onChange={(e) => handleInputChange(e, el)}
-                    className="bg-transparent border-none text-center outline-none w-full h-auto
-             text-4xl font-bold resize-none break-words overflow-hidden"
-                    style={{
-                      whiteSpace: "pre-wrap",
-                      wordBreak: "break-word",
-                      overflowWrap: "break-word",
-                    }}
-                    rows={1}
-                  />
-                </div>
-              )}
-            </Rnd>
-          ))}
-        </div>
-        <div className="ml-10">
-          {elements?.length > 0 && (
-            <button
-              onClick={handleSave}
-              className="w-32 h-full py-2 px-1 bg-blue-500 text-white font-bold rounded"
-            >
-              Save Layout
-            </button>
-          )}
-        </div>
-
-        <div className="p-8">
-          {/* Layout Modal */}
-          {isLayoutModalOpen && (
-            <LayoutModal
-              isOpen={isLayoutModalOpen}
-              handleSelectLayout={handleSelectLayout}
-              setIsLayoutModalOpen={setIsLayoutModalOpen}
-            />
-          )}
-          {/* Primary Widgets */}
-          <div className="flex justify-center items-center">
-            {!selectedLayout && (
-              <div
-                onDragOver={(e) => e.preventDefault()} // Prevent default drag behavior
-                onDrop={(e) => {
-                  const widgetType = e.dataTransfer.getData("widgetType"); // Get dragged widget type
-                  const position = {
-                    x: 0, // Fixed to 0 for horizontal alignment
-                    y: 0, // Initialize y to 0
-                  };
-
-                  if (elements?.length > 0) {
-                    // Calculate the next available y position dynamically
-                    const lastElement = elements[elements.length - 1]; // Get the last element
-                    const lastElementRef = document.getElementById(
-                      `element-${lastElement.id}`
-                    ); // Get its DOM node
-                    const lastElementHeight =
-                      lastElementRef?.offsetHeight || 50; // Get its rendered height or default to 50px
-                    position.y = (lastElement.y || 0) + lastElementHeight + 10; // Add spacing of 10px
-                  }
-
-                  handleAddElement(widgetType, position); // Pass widget type and calculated position
+    <>
+      <div className="flex min-h-screen w-full">
+        <>
+          <WidgetsSidebar widgets={widgets} />
+        </>
+        <div className="bg-gray-50 w-full border border-green-700">
+          <div className="w-10/12 border border-yellow-700 mx-auto relative">
+            {/* Render DnD Elements */}
+            {elements.map((el) => (
+              <Rnd
+                id={`element-${el.id}`}
+                key={el.id}
+                bounds="parent"
+                enableResizing={{
+                  top: false,
+                  right: true,
+                  bottom: false,
+                  left: true,
+                  topRight: false,
+                  bottomRight: false,
+                  bottomLeft: false,
+                  topLeft: false,
                 }}
-                className="w-full border border-dashed border-gray-500 h-32 flex justify-center items-center"
+                size={{ width: el.width, height: el.height }}
+                onDragStop={(e, d) => {
+                  setElements((prev) =>
+                    prev.map((element) =>
+                      element.id === el.id ? { ...element } : element
+                    )
+                  );
+                }}
+                onResizeStop={(e, direction, ref, delta) => {
+                  setElements((prev) =>
+                    prev.map((element) =>
+                      element.id === el.id
+                        ? {
+                            ...element,
+                            width: parseInt(ref.style.width),
+                            height: parseInt(ref.style.height),
+                          }
+                        : element
+                    )
+                  );
+                }}
+                style={{ position: "static", top: "auto", left: "auto" }}
+                className="p-2 border border-transparent hover:border hover:border-pink-300 w-full"
               >
-                <button
-                  onClick={handleAddSection}
-                  className="mb-4 px-4 py-2 bg-blue-500 text-white rounded-full"
-                >
-                  +
-                </button>
+                {el.type === "heading" && (
+                  <div className="text-center border-2 border-pink-400">
+                    <textarea
+                      ref={textareaRef}
+                      value={el.content}
+                      onChange={(e) => handleInputChange(e, el)}
+                      className="bg-transparent border-none text-center outline-none w-full h-auto
+             text-4xl font-bold resize-none break-words overflow-hidden"
+                      style={{
+                        whiteSpace: "pre-wrap",
+                        wordBreak: "break-word",
+                        overflowWrap: "break-word",
+                      }}
+                      rows={1}
+                    />
+                  </div>
+                )}
+              </Rnd>
+            ))}
+
+            <div className="p-8 border border-blue-500 w-full flex justify-center items-center mt-10">
+              <div className="w-full">
+                <div className="ml-10 mb-5">
+                  {elements?.length > 0 && (
+                    <button
+                      onClick={handleSave}
+                      className="w-32 h-full py-2 px-1 bg-blue-500 text-white font-bold rounded"
+                    >
+                      Save Layout
+                    </button>
+                  )}
+                </div>
+
+                {isLayoutModalOpen && (
+                  <LayoutModal
+                    isOpen={isLayoutModalOpen}
+                    handleSelectLayout={handleSelectLayout}
+                    setIsLayoutModalOpen={setIsLayoutModalOpen}
+                  />
+                )}
+
+                <div className="flex justify-center items-center">
+                  {!selectedLayout && (
+                    <div
+                      onDragOver={(e) => e.preventDefault()}
+                      onDrop={(e) => {
+                        const widgetType = e.dataTransfer.getData("widgetType");
+                        handleAddElement(widgetType);
+                      }}
+                      className="w-8/12 border border-dashed border-gray-500 h-32 flex justify-center items-center"
+                    >
+                      <button
+                        onClick={handleAddSection}
+                        className="mb-4 px-4 py-2 bg-blue-500 text-white rounded-full"
+                      >
+                        +
+                      </button>
+                    </div>
+                  )}
+                </div>
+
+                {selectedLayout === "Flexbox" && (
+                  <LayoutOptions
+                    selectedLayout={selectedLayout}
+                    onSelectStyle={handleSelectLayoutStyle}
+                  />
+                )}
               </div>
-            )}
+            </div>
           </div>
-          {/* Layout Options For Flexbox */}
-          {selectedLayout === "Flexbox" && (
-            <LayoutOptions
-              selectedLayout={selectedLayout}
-              onSelectStyle={handleSelectLayoutStyle}
-            />
-          )}
         </div>
       </div>
-    </div>
+    </>
   );
 }
