@@ -1,15 +1,16 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Rnd } from "react-rnd";
 import "react-quill/dist/quill.snow.css";
 import { FaHeading } from "react-icons/fa";
 import LayoutModal from "./../LayoutModal";
-import LayoutStylePreview from "./../LayoutStylePreview";
 import LayoutOptions from "./../LayoutOptions";
 import { useRef } from "react";
 import { toast } from "react-toastify";
-import WidgetsSidebar from "./Sidebar";
+import Sidebar from "./Sidebar";
+import { MdFormatAlignLeft } from "react-icons/md";
+import SaveLayoutBtn from "./SaveLayoutBtn";
 
 export default function Widgets({
   handleAddSection,
@@ -22,6 +23,7 @@ export default function Widgets({
 }) {
   const textareaRef = useRef(null);
   const [elements, setElements] = useState([]);
+  const [currElmId, setCurrElmId] = useState("");
 
   const widgets = [
     {
@@ -29,9 +31,15 @@ export default function Widgets({
       label: "Heading",
       icon: <FaHeading />,
     },
+    {
+      type: "text",
+      label: "Text Editor",
+      icon: <MdFormatAlignLeft />,
+    },
   ];
 
   const handleAddElement = (type) => {
+    setCurrElmId(elements.length + 1);
     const newElement = {
       id: elements.length + 1,
       type,
@@ -45,43 +53,6 @@ export default function Widgets({
       },
     };
     setElements([...elements, newElement]);
-  };
-
-  const preparePayload = (elm) => ({
-    title: "My Awesome Page",
-    slug: "my-awesome-page",
-    designData: elm.map((el, i) => ({
-      id: el.id.toString(),
-      style: { width: el.width, height: el.height },
-      components: [
-        {
-          id: i + 1,
-          type: el.type,
-          content: el.content,
-          htmlTag: el.htmlTag,
-          style: el.style,
-        },
-      ],
-    })),
-  });
-
-  const handleSave = async () => {
-    const payload = preparePayload(elements);
-    // console.log(payload, "payload");
-    try {
-      const response = await fetch("/api/pages", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      });
-      if (response.ok) {
-        toast.success("Layout saved successfully!");
-      } else {
-        toast.error("Failed to save layout.");
-      }
-    } catch (error) {
-      console.error("Error saving layout:", error);
-    }
   };
 
   const handleInputChange = (e, el) => {
@@ -101,14 +72,42 @@ export default function Widgets({
     setElements((prev) => prev.filter((element) => element.id !== elmId));
   };
 
+  const handleSetCurrentElmId = (elmId) => {
+    setCurrElmId(elmId);
+  };
+
+  useEffect(() => {
+    if (elements?.length < 1) {
+      setCurrElmId("");
+    }
+    const handleClickOutside = (event) => {
+      // Check if the click is outside all Rnd elements
+      if (
+        !event.target.closest(".contentCompClose") &&
+        !event.target.closest(".sidebar")
+      ) {
+        setCurrElmId(""); // Reset currElmId when clicking outside
+      }
+    };
+
+    // Attach event listener for clicks
+    document.addEventListener("mousedown", handleClickOutside);
+
+    // Cleanup event listener on component unmount
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [elements?.length]);
+
   return (
     <>
       <div className="flex min-h-screen w-full">
-        <>
-          <WidgetsSidebar widgets={widgets} />
-        </>
+        <div className="w-3/12 bg-gray-100 p-4 border-r overflow-y-auto sidebar">
+          <Sidebar widgets={widgets} currElmId={currElmId} />
+        </div>
+
         <div className="bg-gray-50 w-full">
-          <div className="w-10/12 mx-auto mt-6">
+          <div className="w-9/12 mx-auto mt-6 contentCompClose border border-red-500">
             {/* Render DnD Elements */}
             {elements.map((el) => (
               <Rnd
@@ -146,6 +145,7 @@ export default function Widgets({
                     )
                   );
                 }}
+                onClick={() => handleSetCurrentElmId(el.id)}
                 style={{ position: "relative", top: "auto", left: "auto" }}
                 className="p-2 border border-transparent 
                 hover:border hover:border-pink-300 w-full show__after_parent"
@@ -179,16 +179,7 @@ export default function Widgets({
 
             <div className="p-8 w-full flex justify-center items-center mt-10">
               <div className="w-full">
-                <div className="ml-10 mb-5">
-                  {elements?.length > 0 && (
-                    <button
-                      onClick={handleSave}
-                      className="w-32 h-full py-2 px-1 bg-blue-500 text-white font-bold rounded"
-                    >
-                      Save Layout
-                    </button>
-                  )}
-                </div>
+                <SaveLayoutBtn elements={elements} />
 
                 {isLayoutModalOpen && (
                   <LayoutModal

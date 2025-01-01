@@ -29,7 +29,11 @@ export default async function page() {
       {data.map((page) => (
         <div key={page._id}>
           {page.designData.map((design) => (
-            <section key={design.id} style={design.style}>
+            <section
+              key={design.id}
+              className={design.style.classname}
+              style={design.style.custom}
+            >
               {design.components.map((section) => {
                 const SectionTag = section.htmlTag || "div";
                 return (
