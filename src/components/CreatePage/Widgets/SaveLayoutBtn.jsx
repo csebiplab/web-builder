@@ -1,3 +1,6 @@
+"use client";
+import { toast } from "react-toastify";
+
 export default function SaveLayoutBtn({ elements }) {
   if (elements?.length < 1) return null;
 

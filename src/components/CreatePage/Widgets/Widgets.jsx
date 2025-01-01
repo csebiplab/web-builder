@@ -7,7 +7,6 @@ import { FaHeading } from "react-icons/fa";
 import LayoutModal from "./../LayoutModal";
 import LayoutOptions from "./../LayoutOptions";
 import { useRef } from "react";
-import { toast } from "react-toastify";
 import Sidebar from "./Sidebar";
 import { MdFormatAlignLeft } from "react-icons/md";
 import SaveLayoutBtn from "./SaveLayoutBtn";
@@ -40,16 +39,27 @@ export default function Widgets({
 
   const handleAddElement = (type) => {
     setCurrElmId(elements.length + 1);
+    let content = "";
+    let htmlTag = "div";
+    let classNameForCompnt = "";
+    let customStyle = {};
+    if (type === "heading") {
+      content = "Add Your Heading Text Here";
+      htmlTag = "h1";
+      classNameForCompnt = "text-4xl font-bold text-center";
+      customStyle["fontSize"] = "36px";
+    }
+
     const newElement = {
       id: elements.length + 1,
       type,
       width: "100%",
       height: "auto",
-      content: type === "heading" ? "Add Your Heading Text Here" : "",
-      htmlTag: type === "heading" ? "h1" : "div",
+      content: content,
+      htmlTag: htmlTag,
       style: {
-        classname: "text-4xl font-bold text-center",
-        custom: { fontSize: "36px" },
+        classname: classNameForCompnt,
+        custom: customStyle,
       },
     };
     setElements([...elements, newElement]);
